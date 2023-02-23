@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { fetchPosts, TestReducerStateType } from './store/reducers/testReducer'
 import LinearProgress from '@mui/material/LinearProgress'
+
+import React, { useState } from 'react'
+
+import { fetchPosts, TestReducerStateType } from './store/reducers/testReducer'
 import { useAppDispatch } from './hooks/useAppDispatch'
 import { useAppSelector } from './hooks/useAppSelector'
 import { Post } from './components/Post'
@@ -15,7 +17,6 @@ export const App = () => {
     dispatch(fetchPosts({ isLoading: true, id })) // KAK PRAVILNO POLUCHIT ID V SAGE ?
     setId(id + 1)
   }
-
   return (
     <div>
       {isLoading && <LinearProgress />}

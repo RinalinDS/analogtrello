@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { AxiosError, AxiosResponse } from 'axios'
+
 import {
   fetchPostFulfilled,
   fetchPosts,

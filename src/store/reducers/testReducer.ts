@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import { PostType } from '../../types/PostType'
 
 export type TestReducerStateType = {

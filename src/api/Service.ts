@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
+
 import { PostType } from '../types/PostType'
 
 const instance = axios.create({

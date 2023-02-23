@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import createSagaMiddleware from 'redux-saga'
+
+import logger from 'redux-logger'
+
 import { testReducer } from './reducers/testReducer'
 import rootSaga from './sagas/index.js'
-import logger from 'redux-logger'
 
 const sagaMiddleware = createSagaMiddleware()
 
