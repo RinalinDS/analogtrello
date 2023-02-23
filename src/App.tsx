@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { fetchPosts, TestReducerStateType } from './store/reducers/testReducer'
-import { LinearProgress } from '@mui/material'
+import LinearProgress from '@mui/material/LinearProgress'
 import { useAppDispatch } from './hooks/useAppDispatch'
 import { useAppSelector } from './hooks/useAppSelector'
 import { Post } from './components/Post'
@@ -12,7 +12,7 @@ export const App = () => {
   const [id, setId] = useState<number>(1)
 
   const onClickHandler = () => {
-    dispatch(fetchPosts({ isLoading: true, id }))
+    dispatch(fetchPosts({ isLoading: true, id })) // KAK PRAVILNO POLUCHIT ID V SAGE ?
     setId(id + 1)
   }
 
