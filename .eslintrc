@@ -29,6 +29,10 @@
         ],
         "newlines-between": "always-and-inside-groups"
       }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "varsIgnorePattern": "React", "argsIgnorePattern": "^_" }
     ]
   }
 }
