@@ -13,12 +13,16 @@ const initialState: TestReducerStateType = {
   posts: [],
 }
 
+export type fetchPostsPayloadAction = {
+  id: number
+}
+
 const slice = createSlice({
   name: 'test',
   initialState,
   reducers: {
-    fetchPosts: (state, action: PayloadAction<{ isLoading: boolean; id: number }>) => {
-      state.isLoading = action.payload.isLoading
+    fetchPosts: (state, action) => {
+      state.isLoading = true
     },
     fetchPostFulfilled: (state, action: PayloadAction<PostType>) => {
       state.posts.push(action.payload)
@@ -26,8 +30,8 @@ const slice = createSlice({
     fetchPostsReject: (state, action) => {
       state.error = action.payload
     },
-    fetchPostsFinally: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload
+    fetchPostsFinally: state => {
+      state.isLoading = false
     },
   },
 })
