@@ -5,11 +5,13 @@ import logger from 'redux-logger'
 
 import { testReducer } from './reducers/testReducer'
 import rootSaga from './sagas/index.js'
+import { boardReducer } from './reducers/boardReducer'
 
 const sagaMiddleware = createSagaMiddleware()
 
 export const reducers = combineReducers({
   test: testReducer,
+  board: boardReducer,
 })
 
 export const store = configureStore({
