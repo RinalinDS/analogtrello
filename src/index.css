@@ -10,13 +10,5 @@ html {
 
 body {
     font-family: sans-serif;
-    color: #343a40;
-    font-size: 2.4rem;
-    min-height: 100vh;
-
-    height: 100%;
-}
-
-#root {
-    height: 100%;
+    font-size: 1.6rem;
 }
