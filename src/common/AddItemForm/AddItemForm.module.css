@@ -1,0 +1,19 @@
+.container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem
+  /*margin: 3rem 0;*/
+  /*align-items: center;*/
+}
+
+.textField label,
+.textField input,
+.textField span {
+  font-size: 1.6rem;
+}
+
+.textField p {
+  font-size: 0.9rem;
+}
+
