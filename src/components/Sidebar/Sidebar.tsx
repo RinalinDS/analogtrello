@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { IconButton } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
 
 import AddIcon from '@mui/icons-material/Add'
 
@@ -11,24 +11,31 @@ import { Modal } from '../../common/Modal/Modal'
 
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { addBoardFulFilled, BoardType } from '../../store/reducers/boardReducer'
 
 import { AddItemForm } from '../../common/AddItemForm/AddItemForm'
+
+import { BoardType } from '../../types/BoardsType'
+import { addBoard, fetchBoards } from '../../store/reducers/boardsReducer'
 
 import styles from './Sidebar.module.css'
 
 export const Sidebar = () => {
   const dispatch = useAppDispatch()
-  const boards = useAppSelector<BoardType[]>(state => state.board)
+  const boards = useAppSelector<BoardType[]>(state => state.boards.boards)
 
   const addBoardHandler = (title: string) => {
     const id = +new Date()
-    dispatch(addBoardFulFilled({ id, title }))
+    dispatch(addBoard({ id, title }))
     setIsModalActive(false)
   }
 
   const [isModalActive, setIsModalActive] = useState(false)
   const activateModal = () => setIsModalActive(true)
+
+  useEffect(() => {
+    dispatch(fetchBoards())
+  }, [dispatch])
+
   return (
     <SidebarContainer>
       <div className={styles.addBoard}>
@@ -40,14 +47,14 @@ export const Sidebar = () => {
       <List>
         {boards.map((m, _i) => {
           return (
-            <li>
+            <li key={m.id}>
               <Link to={`/boards/${m.id}`}>{m.title}</Link>
             </li>
           )
         })}
       </List>
       <Modal setIsModalVisible={setIsModalActive} visible={isModalActive}>
-        <AddItemForm callBack={addBoardHandler} />
+        <AddItemForm callBack={addBoardHandler} label={'Board title'} />
       </Modal>
     </SidebarContainer>
   )

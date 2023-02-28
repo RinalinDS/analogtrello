@@ -6,9 +6,10 @@ import styles from './AddItemForm.module.css'
 type AddItemFormPropsType = {
   callBack: (title: string) => void
   disabled?: boolean
+  label?: string
 }
 
-export const AddItemForm: FC<AddItemFormPropsType> = memo(({ callBack, disabled }) => {
+export const AddItemForm: FC<AddItemFormPropsType> = memo(({ callBack, disabled, label }) => {
   const [newTitle, setNewTitle] = useState('')
   const [error, setError] = useState<string | null>(null)
 
@@ -43,7 +44,7 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(({ callBack, disabled 
         onChange={onSetNewTitleHandler}
         onKeyDown={onEnterKeyPressHandler}
         error={!!error}
-        label="Board"
+        label={label}
         helperText={error}
         disabled={disabled}
       />
