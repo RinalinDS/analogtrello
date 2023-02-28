@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects'
 
-import { TestWatcher } from './testSaga'
+import { BoardsWatcher } from './boardsSaga'
 
 export default function* rootSaga() {
-  yield all([TestWatcher()])
+  yield all([BoardsWatcher()])
 }

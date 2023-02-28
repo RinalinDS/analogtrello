@@ -1,0 +1,9 @@
+.addBoard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button svg {
+    font-size: 2.4rem;
+}

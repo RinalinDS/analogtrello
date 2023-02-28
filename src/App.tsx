@@ -1,31 +1,24 @@
-import LinearProgress from '@mui/material/LinearProgress'
+import React from 'react'
 
-import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import { fetchPosts, TestReducerStateType } from './store/reducers/testReducer'
-import { useAppDispatch } from './hooks/useAppDispatch'
-import { useAppSelector } from './hooks/useAppSelector'
-import { Post } from './components/Post'
+import { Header } from './components/Header/Header'
+import { Sidebar } from './components/Sidebar/Sidebar'
+import { Main } from './components/Main/Main'
 
 export const App = () => {
-  const { posts, isLoading } = useAppSelector<TestReducerStateType>(state => state.test)
-  const dispatch = useAppDispatch()
-
-  const [id, setId] = useState<number>(1)
-
-  const onClickHandler = () => {
-    dispatch(fetchPosts({ isLoading: true, id })) // KAK PRAVILNO POLUCHIT ID V SAGE ?
-    setId(id + 1)
-  }
   return (
-    <div>
-      {isLoading && <LinearProgress />}
-      <button onClick={onClickHandler}>GET NEXT POST</button>
-      <div>
-        {posts.map(m => (
-          <Post key={m.id} body={m.body} title={m.title} />
-        ))}
-      </div>
-    </div>
+    <AppContainer>
+      <Header />
+      <Sidebar />
+      <Main />
+    </AppContainer>
   )
 }
+
+export const AppContainer = styled.div`
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 26rem 1fr;
+  grid-template-rows: 8rem 1fr;
+`
