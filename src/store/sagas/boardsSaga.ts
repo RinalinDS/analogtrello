@@ -1,64 +1,32 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import { call, put, takeEvery } from 'redux-saga/effects'
 import { AxiosError, AxiosResponse } from 'axios'
 
 import { PayloadAction } from '@reduxjs/toolkit'
 
 import { Service } from '../../api/Service'
-import { BoardType, CardType, TaskType } from '../../types/BoardsType'
+import { BoardType } from '../../types/BoardsType'
 import {
   addBoard,
   addBoardFulfilled,
-  addCard,
-  addCardFulfilled,
-  addTask,
-  addTaskFulfilled,
   fetchBoards,
   fetchBoardsFulfilled,
-  fetchCards,
-  fetchCardsFulfilled,
-  fetchTasks,
-  fetchTasksFulfilled,
-  requestFinally,
-  requestReject,
 } from '../reducers/boardsReducer'
+import {
+  addErrorMsg,
+  addSuccessMsg,
+  requestFinally,
+  requestInitiated,
+} from '../reducers/appReducer'
+import { ErrorMessage, SuccessMessage } from '../../enums/Message'
 
 export function* getBoardsWorker() {
   try {
+    yield put(requestInitiated())
     const res: AxiosResponse<BoardType[]> = yield call(Service.getBoards)
     yield put(fetchBoardsFulfilled(res.data))
   } catch (e) {
     const error = e as AxiosError<{ message: string }>
-    yield put(requestReject(error?.response?.data?.message || 'Some error'))
-  } finally {
-    yield put(requestFinally())
-  }
-}
-
-export function* getCardsWorker(action: PayloadAction<{ id: number }>) {
-  try {
-    const res: AxiosResponse<BoardType & { cards: CardType[] }> = yield call(
-      Service.getCards,
-      action.payload.id,
-    )
-    yield put(fetchCardsFulfilled(res.data.cards))
-  } catch (e) {
-    const error = e as AxiosError<{ message: string }>
-    yield put(requestReject(error?.response?.data?.message || 'Some error'))
-  } finally {
-    yield put(requestFinally())
-  }
-}
-
-export function* getTasksWorker(action: PayloadAction<{ id: number }>) {
-  try {
-    const res: AxiosResponse<CardType & { tasks: TaskType[] }> = yield call(
-      Service.getTasks,
-      action.payload.id,
-    )
-    yield put(fetchTasksFulfilled({ tasks: res.data.tasks, id: res.data.id }))
-  } catch (e) {
-    const error = e as AxiosError<{ message: string }>
-    yield put(requestReject(error?.response?.data?.message || 'Some error'))
+    yield put(addErrorMsg(error?.response?.data?.message || ErrorMessage.Some))
   } finally {
     yield put(requestFinally())
   }
@@ -66,35 +34,13 @@ export function* getTasksWorker(action: PayloadAction<{ id: number }>) {
 
 export function* addBoardWorker(action: PayloadAction<BoardType>) {
   try {
+    yield put(requestInitiated())
     const res: AxiosResponse<BoardType> = yield call(Service.addBoard, action.payload)
     yield put(addBoardFulfilled(res.data))
+    yield put(addSuccessMsg(SuccessMessage.Board))
   } catch (e) {
     const error = e as AxiosError<{ message: string }>
-    yield put(requestReject(error?.response?.data?.message || 'Some error'))
-  } finally {
-    yield put(requestFinally())
-  }
-}
-
-export function* addCardWorker(action: PayloadAction<CardType>) {
-  try {
-    const res: AxiosResponse<CardType> = yield call(Service.addCard, action.payload)
-    yield put(addCardFulfilled(res.data))
-  } catch (e) {
-    const error = e as AxiosError<{ message: string }>
-    yield put(requestReject(error?.response?.data?.message || 'Some error'))
-  } finally {
-    yield put(requestFinally())
-  }
-}
-
-export function* addTaskWorker(action: PayloadAction<TaskType>) {
-  try {
-    const res: AxiosResponse<TaskType> = yield call(Service.addTask, action.payload)
-    yield put(addTaskFulfilled(res.data))
-  } catch (e) {
-    const error = e as AxiosError<{ message: string }>
-    yield put(requestReject(error?.response?.data?.message || 'Some error'))
+    yield put(addErrorMsg(error?.response?.data?.message || ErrorMessage.Some))
   } finally {
     yield put(requestFinally())
   }
@@ -103,10 +49,4 @@ export function* addTaskWorker(action: PayloadAction<TaskType>) {
 export function* BoardsWatcher() {
   yield takeEvery(fetchBoards.type, getBoardsWorker)
   yield takeEvery(addBoard.type, addBoardWorker)
-  yield takeEvery(fetchCards.type, getCardsWorker)
-  yield takeEvery(addCard.type, addCardWorker)
-  yield takeEvery(fetchTasks.type, getTasksWorker)
-  yield takeEvery(addTask.type, addTaskWorker)
 }
-// TAK EVERY SUKA NE TAKE LATEST !!!!
-// action.type nado lovit gramotno
