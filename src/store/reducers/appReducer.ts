@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { MessageType } from '../../types/MessageType'
 
@@ -12,29 +12,9 @@ const initialState: AppReducerStateType = {
 }
 
 const slice = createSlice({
-  name: 'boards',
+  name: 'app',
   initialState,
   reducers: {
-    addErrorMsg: (state, action: PayloadAction<string>) => {
-      const message: MessageType = {
-        id: new Date().toISOString(),
-        severity: 'error',
-        message: action.payload,
-      }
-      state.messages.push(message)
-    },
-    addSuccessMsg: (state, action: PayloadAction<string>) => {
-      const message: MessageType = {
-        id: new Date().toISOString(),
-        severity: 'success',
-        message: action.payload,
-      }
-      state.messages.push(message)
-    },
-    removeMessage: (state, action: PayloadAction<string>) => {
-      const index = state.messages.findIndex(f => f.id === action.payload)
-      state.messages.splice(index, 1)
-    },
     requestFinally: state => {
       state.isLoading = false
     },
@@ -46,5 +26,4 @@ const slice = createSlice({
 
 export const appReducer = slice.reducer
 
-export const { addErrorMsg, addSuccessMsg, requestFinally, requestInitiated, removeMessage } =
-  slice.actions
+export const { requestFinally, requestInitiated } = slice.actions

@@ -12,18 +12,24 @@ export const Modal: FC<PortalModalPropsType> = memo(({ visible, children, setIsM
   const onClickHandler = useCallback(() => {
     setIsModalVisible(false)
   }, [setIsModalVisible])
+
   const root = document.querySelector('body')
-  useEffect(() => {
-    const onEscPressHandler = function (e: KeyboardEvent) {
+
+  const onEscPressHandler = useCallback(
+    (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsModalVisible(false)
       }
-    }
+    },
+    [setIsModalVisible],
+  )
+
+  useEffect(() => {
     window.addEventListener('keydown', onEscPressHandler)
     return () => {
       window.removeEventListener('keydown', onEscPressHandler)
     }
-  }, [setIsModalVisible])
+  }, [setIsModalVisible, onEscPressHandler])
 
   if (root && visible) {
     return createPortal(

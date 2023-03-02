@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import IconButton from '@mui/material/IconButton'
@@ -21,7 +21,7 @@ import { selectBoards } from '../../store/selectors/boardsSelector'
 import { LabelMessage } from '../../enums/Message'
 import { ServicePath } from '../../enums/ServicePath'
 
-export const Sidebar = () => {
+export const Sidebar = memo(() => {
   const [isModalActive, setIsModalActive] = useState(false)
   const dispatch = useAppDispatch()
   const boards = useAppSelector<BoardType[]>(selectBoards)
@@ -63,7 +63,7 @@ export const Sidebar = () => {
       </Modal>
     </SidebarContainer>
   )
-}
+})
 
 export const SidebarContainer = styled.div`
   grid-row-start: span 2;

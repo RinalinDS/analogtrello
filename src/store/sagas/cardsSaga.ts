@@ -11,13 +11,9 @@ import {
   fetchCards,
   fetchCardsFulfilled,
 } from '../reducers/cardsReducer'
-import {
-  requestFinally,
-  requestInitiated,
-  addErrorMsg,
-  addSuccessMsg,
-} from '../reducers/appReducer'
+import { requestFinally, requestInitiated } from '../reducers/appReducer'
 import { ErrorMessage, SuccessMessage } from '../../enums/Message'
+import { addErrorMsg, addSuccessMsg } from '../reducers/snackbarReducer'
 
 export function* addCardWorker(action: PayloadAction<CardType>) {
   try {

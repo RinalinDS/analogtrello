@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import React from 'react'
+import React, { memo } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { Board } from '../Board'
 import { RoutesPath } from '../../enums/RoutesPath'
 
-export const Main = () => {
+export const Main = memo(() => {
   return (
     <MainContainer>
       <Routes>
@@ -13,7 +13,7 @@ export const Main = () => {
       </Routes>
     </MainContainer>
   )
-}
+})
 export const MainContainer = styled.div`
   background: yellow;
 `

@@ -1,18 +1,17 @@
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC, memo, useCallback, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
 
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { AddItemForm } from '../../common/AddItemForm'
-
-import { Tasks } from '../Tasks'
 import { selectTasksByCardId } from '../../store/selectors/cardsSelector'
 import { addCard, fetchCards } from '../../store/reducers/cardsReducer'
 import { LabelMessage } from '../../enums/Message'
+import { AddItemForm } from '../../common/AddItemForm'
+import { Card } from '../Card'
 
-export const Board: FC = () => {
+export const Board: FC = memo(() => {
   const { id } = useParams()
   const dispatch = useAppDispatch()
   const cards = useAppSelector(state => selectTasksByCardId(state, id))
@@ -32,24 +31,20 @@ export const Board: FC = () => {
   }, [id, dispatch])
 
   return (
-    <CardsContainer>
-      {cards.map(m => {
-        return (
-          <StyledDiv key={m.id}>
-            <StyledDiv>card title: {m.title || 'no board with this id'}</StyledDiv>
-            <Tasks cardId={m.id} />
-          </StyledDiv>
-        )
-      })}
-      <div>
+    <BoardContainer>
+      {cards.map(m => (
+        <Card id={m.id} title={m.title} key={m.id} />
+      ))}
+      <StyledDiv>
         <AddItemForm callBack={addCardHandler} label={LabelMessage.EnterListTitle} />
-      </div>
-    </CardsContainer>
+      </StyledDiv>
+    </BoardContainer>
   )
-}
+})
 
-export const CardsContainer = styled.div`
+export const BoardContainer = styled.div`
   display: flex;
   gap: 2rem;
 `
+
 export const StyledDiv = styled.div``

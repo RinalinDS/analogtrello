@@ -8,6 +8,7 @@ import { boardsReducer } from './reducers/boardsReducer'
 import { cardsReducer } from './reducers/cardsReducer'
 import { tasksReducer } from './reducers/tasksReducer'
 import { appReducer } from './reducers/appReducer'
+import { snackbarReducer } from './reducers/snackbarReducer'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -16,6 +17,7 @@ export const reducers = combineReducers({
   cards: cardsReducer,
   tasks: tasksReducer,
   app: appReducer,
+  snackbar: snackbarReducer,
 })
 
 export const store = configureStore({

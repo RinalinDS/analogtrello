@@ -1,73 +1,47 @@
 import React, { FC, memo } from 'react'
-import { TextField } from '@mui/material'
+import * as Yup from 'yup'
 
-import { useFormik } from 'formik'
-
+import { Field, Form, Formik } from 'formik'
 import styled from 'styled-components'
 
 type AddItemFormPropsType = {
   callBack: (title: string) => void
-  label?: string
+  label: string
 }
 
-type ErrorsType = {
-  title: string
-}
+const SignupSchema = Yup.object().shape({
+  title: Yup.string().trim().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+})
 
 export const AddItemForm: FC<AddItemFormPropsType> = memo(({ callBack, label }) => {
-  const formik = useFormik({
-    initialValues: {
-      title: '',
-    },
-    validate: values => {
-      const errors = {} as ErrorsType
-      if (!values.title) {
-        errors.title = 'Title is required'
-      }
-      return errors
-    },
-    onSubmit: values => {
-      callBack(values.title)
-      formik.resetForm()
-    },
-  })
-
-  const { onChange, value, name } = formik.getFieldProps('title')
   return (
-    <StyledForm onSubmit={formik.handleSubmit}>
-      <StyledTextField
-        name={name}
-        variant="outlined"
-        value={value}
-        onChange={onChange}
-        error={!!formik.errors.title}
-        label={label}
-        helperText={formik.errors.title}
-      />
-      <StyledButton disabled={!value} type={'submit'}>
-        create
-      </StyledButton>
-    </StyledForm>
+    <Formik
+      initialValues={{
+        title: '',
+      }}
+      onSubmit={(values, { resetForm }) => {
+        callBack(values.title)
+        resetForm()
+      }}
+      validationSchema={SignupSchema}
+    >
+      {({ values, errors }) => (
+        <StyledForm>
+          <Field name="title" placeholder={label} />
+          <StyledButton disabled={!values.title || !!errors.title} type={'submit'}>
+            create
+          </StyledButton>
+        </StyledForm>
+      )}
+    </Formik>
   )
 })
 
-export const StyledForm = styled.form`
+export const StyledForm = styled(Form)`
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-`
-
-export const StyledTextField = styled(TextField)`
-  & label,
-  & input,
-  & span {
-    font-size: 1.6rem;
-  }
-
-  & p {
-    font-size: 0.9rem;
-  }
 `
 
 export const StyledButton = styled.button``

@@ -11,13 +11,9 @@ import {
   fetchBoards,
   fetchBoardsFulfilled,
 } from '../reducers/boardsReducer'
-import {
-  addErrorMsg,
-  addSuccessMsg,
-  requestFinally,
-  requestInitiated,
-} from '../reducers/appReducer'
+import { requestFinally, requestInitiated } from '../reducers/appReducer'
 import { ErrorMessage, SuccessMessage } from '../../enums/Message'
+import { addErrorMsg, addSuccessMsg } from '../reducers/snackbarReducer'
 
 export function* getBoardsWorker() {
   try {

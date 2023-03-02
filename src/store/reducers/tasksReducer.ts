@@ -3,25 +3,25 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TaskType } from '../../types/BoardsType'
 
 export type TasksReducerStateType = {
-  tasks: TaskType[]
+  tasks: {
+    [key: number]: TaskType[]
+  }
 }
 const initialState: TasksReducerStateType = {
-  tasks: [],
+  tasks: {},
 }
 
 const slice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    fetchTasks: (state, _action: PayloadAction<{ id: number }>) => {
-      state.tasks = []
-    },
+    fetchTasks: (_state, _action: PayloadAction<{ id: number }>) => {},
     fetchTasksFulfilled: (state, action: PayloadAction<{ id: number; tasks: TaskType[] }>) => {
-      state.tasks.push(...action.payload.tasks)
+      state.tasks[action.payload.id] = action.payload.tasks
     },
     addTask: (_state, _action: PayloadAction<TaskType>) => {},
     addTaskFulfilled: (state, action: PayloadAction<TaskType>) => {
-      state.tasks.push(action.payload)
+      state.tasks[action.payload.cardId].push(action.payload)
     },
   },
 })
