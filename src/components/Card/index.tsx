@@ -11,12 +11,16 @@ type CardPropsType = {
 
 export const Card: FC<CardPropsType> = memo(({ id, title }) => {
   return (
-    <StyledDiv>
+    <CardContent>
       <StyledTitle>card: {title}</StyledTitle>
       <Tasks cardId={id} />
-    </StyledDiv>
+    </CardContent>
   )
 })
 
-export const StyledDiv = styled.div``
+export const CardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+`
 export const StyledTitle = styled.h3``

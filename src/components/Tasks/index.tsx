@@ -27,12 +27,14 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
   }, [cardId, dispatch])
 
   return (
-    <TasksContainer>
-      {tasks.map(m => (
-        <Item key={m.id}>{m.title}</Item>
-      ))}
+    <>
+      <TasksContainer>
+        {tasks.map(m => (
+          <Item key={m.id}>{m.title}</Item>
+        ))}
+      </TasksContainer>
       <AddItemForm callBack={addTaskHandler} label={LabelMessage.AddTask} />
-    </TasksContainer>
+    </>
   )
 })
 

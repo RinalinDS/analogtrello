@@ -32,19 +32,21 @@ export const Board: FC = memo(() => {
 
   return (
     <BoardContainer>
-      {cards.map(m => (
-        <Card id={m.id} title={m.title} key={m.id} />
-      ))}
-      <StyledDiv>
-        <AddItemForm callBack={addCardHandler} label={LabelMessage.EnterListTitle} />
-      </StyledDiv>
+      <CardsContainer>
+        {cards.map(m => (
+          <Card id={m.id} title={m.title} key={m.id} />
+        ))}
+      </CardsContainer>
+      <AddItemForm callBack={addCardHandler} label={LabelMessage.EnterListTitle} />
     </BoardContainer>
   )
 })
 
 export const BoardContainer = styled.div`
   display: flex;
+  gap: 1rem;
+`
+export const CardsContainer = styled.div`
+  display: flex;
   gap: 2rem;
 `
-
-export const StyledDiv = styled.div``
