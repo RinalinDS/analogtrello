@@ -14,6 +14,4 @@ export const Main = memo(() => {
     </MainContainer>
   )
 })
-export const MainContainer = styled.div`
-  background: yellow;
-`
+export const MainContainer = styled.div``

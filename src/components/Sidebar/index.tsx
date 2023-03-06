@@ -5,31 +5,36 @@ import IconButton from '@mui/material/IconButton'
 
 import AddIcon from '@mui/icons-material/Add'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
+import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
 import { Modal } from '../../common/Modal'
 
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 
-import { AddItemForm } from '../../common/AddItemForm'
+import { AddItemForm } from '../../common/AddItemForm/AddBoardForm'
 
 import { BoardType } from '../../types/BoardsType'
-import { addBoard, fetchBoards } from '../../store/reducers/boardsReducer'
+import { addBoard, deleteBoard, fetchBoards } from '../../store/reducers/boardsReducer'
 
-import { selectBoards } from '../../store/selectors/boardsSelector'
+import { selectBoards, selectCurrentBoard } from '../../store/selectors/boardsSelector'
 import { LabelMessage } from '../../enums/Message'
 import { ServicePath } from '../../enums/ServicePath'
+import { RoutesPath } from '../../enums/RoutesPath'
 
 export const Sidebar = memo(() => {
   const [isModalActive, setIsModalActive] = useState(false)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
+  const currentBoard = useAppSelector<BoardType>(selectCurrentBoard)
 
   const addBoardHandler = useCallback(
-    (title: string) => {
+    (title: string, color: string) => {
       const id = +new Date()
-      dispatch(addBoard({ id, title }))
+      dispatch(addBoard({ id, title, color }))
       setIsModalActive(false)
     },
     [dispatch],
@@ -37,9 +42,19 @@ export const Sidebar = memo(() => {
 
   const activateModal = useCallback(() => setIsModalActive(true), [])
 
+  const onDeleteButtonClick = useCallback(
+    (id: number) => {
+      dispatch(deleteBoard({ id }))
+      navigate(RoutesPath.index)
+    },
+    [navigate, dispatch],
+  )
+
   useEffect(() => {
     dispatch(fetchBoards())
   }, [dispatch])
+
+  //TODO separate for map component
 
   return (
     <SidebarContainer>
@@ -52,8 +67,15 @@ export const Sidebar = memo(() => {
       <List>
         {boards.map((m, _i) => {
           return (
-            <Item key={m.id}>
+            <Item key={m.id} active={currentBoard?.id === m.id}>
               <Link to={`${ServicePath.boards}/${m.id}`}>{m.title}</Link>
+              <StyledIconButton
+                onClick={() => {
+                  onDeleteButtonClick(m.id)
+                }}
+              >
+                <CloseSharpIcon />
+              </StyledIconButton>
             </Item>
           )
         })}
@@ -93,25 +115,28 @@ export const List = styled.div`
   flex-direction: column;
   gap: 1.2rem;
 
-  & div:hover {
-    background: lightblue;
-  }
-
   & a:link,
   a:visited {
-    color: #1098ad;
+    color: #fff;
     text-decoration: none;
+    width: 70%;
+    padding: 0.6rem;
   }
 
   & a:hover {
-    color: gray;
-    font-weight: bold;
   }
 
   & a:active {
-    background-color: black;
-    font-style: italic;
   }
 `
 
-export const Item = styled.div``
+export const Item = styled.div<{ active: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: ${({ active }) => (active ? 'rgba(173, 216, 230, 0.6)' : '')};
+
+  &:hover {
+    background: rgba(173, 216, 230, 0.35);
+  }
+`

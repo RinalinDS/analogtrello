@@ -4,11 +4,13 @@ import styled from 'styled-components'
 
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { TaskType } from '../../types/BoardsType'
-import { AddItemForm } from '../../common/AddItemForm'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { selectTasksByCardId } from '../../store/selectors/tasksSelector'
 import { addTask, fetchTasks } from '../../store/reducers/tasksReducer'
 import { LabelMessage } from '../../enums/Message'
+import { AddTaskForm } from '../../common/AddItemForm/AddTaskForm'
+
+import { Task } from './Task'
 
 export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
   const dispatch = useAppDispatch()
@@ -30,10 +32,10 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
     <>
       <TasksContainer>
         {tasks.map(m => (
-          <Item key={m.id}>{m.title}</Item>
+          <Task key={m.id} title={m.title} id={m.id} cardId={cardId} />
         ))}
       </TasksContainer>
-      <AddItemForm callBack={addTaskHandler} label={LabelMessage.AddTask} />
+      <AddTaskForm callBack={addTaskHandler} label={LabelMessage.AddTask} isListEmpty={false} />
     </>
   )
 })
@@ -41,8 +43,6 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
 export const TasksContainer = styled.div`
   display: flex;
   flex-direction: column;
-
-  gap: 1rem;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
 `
-
-export const Item = styled.div``
