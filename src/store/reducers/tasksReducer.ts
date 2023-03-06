@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { TaskType } from '../../types/BoardsType'
+import { DeleteTaskPayloadType, TaskType } from '../../types/BoardsType'
 
 export type TasksReducerStateType = {
   tasks: {
@@ -23,9 +23,21 @@ const slice = createSlice({
     addTaskFulfilled: (state, action: PayloadAction<TaskType>) => {
       state.tasks[action.payload.cardId].push(action.payload)
     },
+    deleteTask: (_state, _action: PayloadAction<DeleteTaskPayloadType>) => {},
+    deleteTaskFulfilled: (state, action: PayloadAction<DeleteTaskPayloadType>) => {
+      const index = state.tasks[action.payload.cardId].findIndex(f => f.id === action.payload.id)
+      state.tasks[action.payload.cardId].splice(index, 1)
+    },
   },
 })
 
 export const tasksReducer = slice.reducer
 
-export const { fetchTasks, fetchTasksFulfilled, addTask, addTaskFulfilled } = slice.actions
+export const {
+  fetchTasks,
+  fetchTasksFulfilled,
+  addTask,
+  addTaskFulfilled,
+  deleteTaskFulfilled,
+  deleteTask,
+} = slice.actions

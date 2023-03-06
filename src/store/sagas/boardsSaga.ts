@@ -8,6 +8,8 @@ import { BoardType } from '../../types/BoardsType'
 import {
   addBoard,
   addBoardFulfilled,
+  deleteBoard,
+  deleteBoardFulfilled,
   fetchBoards,
   fetchBoardsFulfilled,
 } from '../reducers/boardsReducer'
@@ -42,7 +44,22 @@ export function* addBoardWorker(action: PayloadAction<BoardType>) {
   }
 }
 
+export function* deleteBoardWorker(action: PayloadAction<{ id: number }>) {
+  try {
+    yield put(requestInitiated())
+    yield call(Service.deleteBoard, action.payload.id)
+    yield put(deleteBoardFulfilled({ id: action.payload.id }))
+    yield put(addSuccessMsg(SuccessMessage.deleteBoard))
+  } catch (e) {
+    const error = e as AxiosError<{ message: string }>
+    yield put(addErrorMsg(error?.response?.data?.message || ErrorMessage.Some))
+  } finally {
+    yield put(requestFinally())
+  }
+}
+
 export function* BoardsWatcher() {
   yield takeEvery(fetchBoards.type, getBoardsWorker)
   yield takeEvery(addBoard.type, addBoardWorker)
+  yield takeEvery(deleteBoard.type, deleteBoardWorker)
 }

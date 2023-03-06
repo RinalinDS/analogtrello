@@ -8,6 +8,8 @@ import { Service } from '../../api/Service'
 import {
   addCard,
   addCardFulfilled,
+  deleteCard,
+  deleteCardFulfilled,
   fetchCards,
   fetchCardsFulfilled,
 } from '../reducers/cardsReducer'
@@ -45,7 +47,22 @@ export function* getCardsWorker(action: PayloadAction<{ id: number }>) {
   }
 }
 
+export function* deleteCardWorker(action: PayloadAction<{ id: number }>) {
+  try {
+    yield put(requestInitiated())
+    yield call(Service.deleteCard, action.payload.id)
+    yield put(deleteCardFulfilled({ id: action.payload.id }))
+    yield put(addSuccessMsg(SuccessMessage.deleteCard))
+  } catch (e) {
+    const error = e as AxiosError<{ message: string }>
+    yield put(addErrorMsg(error?.response?.data?.message || ErrorMessage.Some))
+  } finally {
+    yield put(requestFinally())
+  }
+}
+
 export function* CardsWatcher() {
   yield takeEvery(fetchCards.type, getCardsWorker)
   yield takeEvery(addCard.type, addCardWorker)
+  yield takeEvery(deleteCard.type, deleteCardWorker)
 }

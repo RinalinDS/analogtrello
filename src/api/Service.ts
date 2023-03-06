@@ -35,4 +35,15 @@ export class Service {
   static async addTask(task: TaskType): Promise<AxiosResponse<TaskType>> {
     return instance.post(ServicePath.tasks, task)
   }
+
+  static async deleteTask(id: number): Promise<AxiosResponse<{}>> {
+    return instance.delete(`${ServicePath.tasks}/${id}`)
+  }
+
+  static async deleteBoard(id: number): Promise<AxiosResponse<{}>> {
+    return instance.delete(`${ServicePath.boards}/${id}`)
+  }
+  static async deleteCard(id: number): Promise<AxiosResponse<{}>> {
+    return instance.delete(`${ServicePath.cards}/${id}`)
+  }
 }

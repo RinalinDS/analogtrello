@@ -21,9 +21,21 @@ const slice = createSlice({
     addCardFulfilled: (state, action: PayloadAction<CardType>) => {
       state.cards.push(action.payload)
     },
+    deleteCard: (_state, _action: PayloadAction<{ id: number }>) => {},
+    deleteCardFulfilled: (state, action: PayloadAction<{ id: number }>) => {
+      const index = state.cards.findIndex(f => f.id === action.payload.id)
+      state.cards.splice(index, 1)
+    },
   },
 })
 
 export const cardsReducer = slice.reducer
 
-export const { fetchCards, fetchCardsFulfilled, addCard, addCardFulfilled } = slice.actions
+export const {
+  fetchCards,
+  fetchCardsFulfilled,
+  addCard,
+  addCardFulfilled,
+  deleteCard,
+  deleteCardFulfilled,
+} = slice.actions
