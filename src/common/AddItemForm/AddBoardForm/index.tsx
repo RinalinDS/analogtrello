@@ -80,6 +80,7 @@ export const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  padding: 2rem;
 `
 export const StyledField = styled(Field)`
   background-color: #fff;

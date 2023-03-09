@@ -8,14 +8,13 @@ import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 type AddItemFormPropsType = {
   callBack: (title: string) => void
   label: string
-  isListEmpty: boolean
 }
 
 const schema = Yup.object().shape({
   title: Yup.string().trim().min(1, 'Too Short!').max(50, 'Too Long!').required('Required'),
 })
 
-export const AddTaskForm: FC<AddItemFormPropsType> = memo(({ callBack, label, isListEmpty }) => {
+export const AddTaskForm: FC<AddItemFormPropsType> = memo(({ callBack, label }) => {
   const [edit, setEdit] = useState<boolean>(false)
   const closeForm = useCallback(() => setEdit(false), [])
   const openForm = useCallback(() => setEdit(true), [])
