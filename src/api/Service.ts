@@ -43,7 +43,12 @@ export class Service {
   static async deleteBoard(id: number): Promise<AxiosResponse<{}>> {
     return instance.delete(`${ServicePath.boards}/${id}`)
   }
+
   static async deleteCard(id: number): Promise<AxiosResponse<{}>> {
     return instance.delete(`${ServicePath.cards}/${id}`)
+  }
+
+  static async changeCardTitle(id: number, title: string): Promise<AxiosResponse<CardType>> {
+    return instance.patch(`${ServicePath.cards}/${id}`, { title })
   }
 }
