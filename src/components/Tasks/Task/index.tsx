@@ -29,7 +29,10 @@ export const Task: FC<TaskPropsType> = memo(({ title, id, cardId }) => {
   )
 })
 
-export const Text = styled.span``
+export const Text = styled.span`
+  word-break: break-word;
+  padding-right: 5rem;
+`
 
 export const Item = styled.div`
   background: white;

@@ -35,7 +35,7 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
           <Task key={m.id} title={m.title} id={m.id} cardId={cardId} />
         ))}
       </TasksContainer>
-      <AddTaskForm callBack={addTaskHandler} label={LabelMessage.AddTask} isListEmpty={false} />
+      <AddTaskForm callBack={addTaskHandler} label={LabelMessage.AddTask} />
     </>
   )
 })
