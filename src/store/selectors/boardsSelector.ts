@@ -9,8 +9,12 @@ export const selectCurrentBoard = createSelector(
   [selectBoards, (_, boardId: string | undefined) => ({ boardId })],
   (cards, { boardId }) => {
     if (!boardId) {
-      return undefined
+      return null
     }
-    return cards.find(f => f.id === +boardId)
+    const card = cards.find(f => f.id === +boardId)
+    if (!card) {
+      return null
+    }
+    return card
   },
 )
