@@ -4,19 +4,19 @@ import { BoardType } from '../../types/BoardsType'
 
 export type BoardsReducerStateType = {
   boards: BoardType[]
-  currentBoard: BoardType
+  currentBoardId: number | null
 }
 const initialState: BoardsReducerStateType = {
   boards: [],
-  currentBoard: {} as BoardType,
+  currentBoardId: null,
 }
 
 const slice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
-    setCurrentBoard: (state, action: PayloadAction<{ id: number }>) => {
-      state.currentBoard = state.boards.find(f => f.id === action.payload.id) as BoardType
+    setCurrentBoardId: (state, action: PayloadAction<{ id: number }>) => {
+      state.currentBoardId = action.payload.id
     },
     fetchBoards: () => {},
     fetchBoardsFulfilled: (state, action: PayloadAction<BoardType[]>) => {
@@ -43,5 +43,5 @@ export const {
   addBoardFulfilled,
   deleteBoardFulfilled,
   deleteBoard,
-  setCurrentBoard,
+  setCurrentBoardId,
 } = slice.actions
