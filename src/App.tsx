@@ -1,21 +1,27 @@
 import React from 'react'
 
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 import { Header } from './components/Header'
 import { Sidebar } from './components/Sidebar'
 import { Main } from './components/Main'
 import { Snackbar } from './common/Snackbar'
+import { useAppSelector } from './hooks/useAppSelector'
+import { selectTheme } from './store/selectors/appSelector'
 
 export const App = () => {
+  const theme = useAppSelector(selectTheme)
+
   return (
-    <AppContainer>
-      <GlobalStyle />
-      <Header />
-      <Sidebar />
-      <Main />
-      <Snackbar />
-    </AppContainer>
+    <ThemeProvider theme={theme}>
+      <AppContainer>
+        <GlobalStyle />
+        <Header />
+        <Sidebar />
+        <Main />
+        <Snackbar />
+      </AppContainer>
+    </ThemeProvider>
   )
 }
 
