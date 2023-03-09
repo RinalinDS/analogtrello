@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Tasks } from '../Tasks'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { deleteCard } from '../../store/reducers/cardsReducer'
+import { changeCardTitle, deleteCard } from '../../store/reducers/cardsReducer'
 
 import { CardTitle } from './CardTitle'
 
@@ -19,9 +19,16 @@ export const Card: FC<CardPropsType> = memo(({ id, title }) => {
     dispatch(deleteCard({ id }))
   }, [dispatch, id])
 
+  const changCardTitle = useCallback(
+    (newTitle: string) => {
+      dispatch(changeCardTitle({ title: newTitle, id }))
+    },
+    [dispatch, id],
+  )
+
   return (
     <CardContent>
-      <CardTitle title={title} callback={onDeleteButtonClick} />
+      <CardTitle title={title} callback={onDeleteButtonClick} changeTitle={changCardTitle} />
       <Tasks cardId={id} />
     </CardContent>
   )

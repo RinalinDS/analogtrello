@@ -20,3 +20,8 @@ export type DeleteTaskPayloadType = {
   cardId: number
   id: number
 }
+
+export type ChangeCardTitlePayloadType = {
+  title: string
+  id: number
+}
