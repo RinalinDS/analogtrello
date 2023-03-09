@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 import styled from 'styled-components'
 
 type PropsType = {
@@ -7,20 +7,33 @@ type PropsType = {
   setActiveColor: (value: number) => void
 }
 
-export const ColorPicker: FC<PropsType> = ({ colors, setActiveColor, activeColor }) => {
+type ColorItemPropsType = {
+  bgColor: string
+  active: boolean
+  onClick: (value: number) => void
+  index: number
+}
+
+export const ColorPicker: FC<PropsType> = memo(({ colors, setActiveColor, activeColor }) => {
   return (
     <Grid>
       <Title>Background:</Title>
       {colors.map((m, i) => (
-        <Item
+        <ColorItem
           key={i}
           bgColor={m.hex}
           active={i === activeColor}
-          onClick={() => setActiveColor(i)}
+          onClick={setActiveColor}
+          index={i}
         />
       ))}
     </Grid>
   )
+})
+
+const ColorItem: FC<ColorItemPropsType> = ({ onClick, active, index, bgColor }) => {
+  const onClickHandler = () => onClick(index)
+  return <Item bgColor={bgColor} active={active} onClick={onClickHandler}></Item>
 }
 
 export const Grid = styled.div`
