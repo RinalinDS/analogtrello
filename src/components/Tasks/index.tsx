@@ -8,7 +8,8 @@ import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { selectTasksByCardId } from '../../store/selectors/tasksSelector'
 import { addTask, fetchTasks } from '../../store/reducers/tasksReducer'
 import { LabelMessage } from '../../enums/Message'
-import { AddTaskForm } from '../../common/AddItemForm/AddTaskForm'
+
+import { AddItemForm } from '../../common/AddItemForm'
 
 import { Task } from './Task'
 
@@ -35,7 +36,13 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
           <Task key={m.id} title={m.title} id={m.id} cardId={cardId} />
         ))}
       </TasksContainer>
-      <AddTaskForm callBack={addTaskHandler} label={LabelMessage.AddTask} />
+      <AddItemForm
+        callBack={addTaskHandler}
+        label={LabelMessage.EnterTaskTitle}
+        component={'textarea'}
+        submitBtnText={LabelMessage.AddTask}
+        btnText={LabelMessage.AddTask}
+      />
     </>
   )
 })

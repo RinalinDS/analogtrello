@@ -1,12 +1,14 @@
 import React, { FC, memo, useState } from 'react'
 import * as Yup from 'yup'
 
-import { Field, Form, Formik } from 'formik'
+import { Form, Formik } from 'formik'
 import styled from 'styled-components'
+
+import { StyledField } from '../../shared/style'
 
 import { ColorPicker } from './ColorPicker'
 
-type AddItemFormPropsType = {
+type AddBoardFormPropsType = {
   callBack: (title: string, color: string) => void
   label: string
 }
@@ -42,7 +44,7 @@ const schema = Yup.object().shape({
   title: Yup.string().trim().min(1, 'Too Short!').max(50, 'Too Long!').required('Required'),
 })
 
-export const AddItemForm: FC<AddItemFormPropsType> = memo(({ callBack, label }) => {
+export const AddBoardForm: FC<AddBoardFormPropsType> = memo(({ callBack, label }) => {
   const [activeColor, setActiveColor] = useState<number>(0)
 
   const submitForm = (title: string) => {
@@ -65,9 +67,9 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(({ callBack, label }) 
         {({ values, errors }) => (
           <StyledForm>
             <StyledField name="title" placeholder={label} />
-            <StyledButton disabled={!values.title || !!errors.title} type={'submit'}>
+            <CreateButton disabled={!values.title || !!errors.title} type={'submit'}>
               Create
-            </StyledButton>
+            </CreateButton>
           </StyledForm>
         )}
       </Formik>
@@ -75,27 +77,15 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(({ callBack, label }) 
   )
 })
 
-export const StyledForm = styled(Form)`
+const StyledForm = styled(Form)`
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   padding: 2rem;
 `
-export const StyledField = styled(Field)`
-  background-color: #fff;
-  box-shadow: inset 0 0 0 2px #0079bf;
-  display: block;
-  margin: 0;
-  width: 100%;
-  outline: none;
-  padding: 8px 12px;
-  line-height: 20px;
-  border: none;
-  border-radius: 3px;
-`
 
-export const StyledButton = styled.button`
+const CreateButton = styled.button`
   background-color: #0079bf;
   box-shadow: none;
   border: none;

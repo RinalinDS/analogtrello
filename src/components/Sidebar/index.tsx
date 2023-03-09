@@ -1,8 +1,6 @@
 import React, { memo, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-import IconButton from '@mui/material/IconButton'
-
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../hooks/useAppDispatch'
@@ -16,10 +14,11 @@ import { RoutesPath } from '../../enums/RoutesPath'
 
 import { BasicMenu } from '../../common/Menu'
 
+import { Text } from '../../common/shared/style'
+
 import { BoardLink } from './BoardLink'
 
 export const Sidebar = memo(() => {
-  // const [isAddModalActive, setIsAddModalActive] = useState(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
@@ -29,14 +28,9 @@ export const Sidebar = memo(() => {
     (title: string, color: string) => {
       const id = +new Date()
       dispatch(addBoard({ id, title, color }))
-      // dispatch(setCurrentBoardId({ id }))
-      // navigate(`boards/${id}`)
-      // setIsAddModalActive(false)
     },
     [dispatch],
   )
-
-  // const activateModal = useCallback(() => setIsAddModalActive(true), [])
 
   const onDeleteButtonClick = useCallback(
     (id: number) => {
@@ -53,11 +47,8 @@ export const Sidebar = memo(() => {
   return (
     <SidebarContainer>
       <AddBoardContainer>
-        <StyledSpan>Your boards</StyledSpan>
+        <Text>Your boards</Text>
         <BasicMenu plus addBoardHandler={addBoardHandler} />
-        {/*<StyledIconButton onClick={activateModal}>*/}
-        {/*  <AddIcon />*/}
-        {/*</StyledIconButton>*/}
       </AddBoardContainer>
       <List>
         {boards.map((m, _i) => {
@@ -72,11 +63,6 @@ export const Sidebar = memo(() => {
           )
         })}
       </List>
-      {/*/!*<Modal setIsModalVisible={setIsAddModalActive} visible={isAddModalActive}>*!/*/}
-      {/*<BasicMenu>*/}
-      {/*  <AddItemForm callBack={addBoardHandler} label={LabelMessage.BoardTitle} />*/}
-      {/*</BasicMenu>*/}
-      {/*/!*</Modal>*!/*/}
     </SidebarContainer>
   )
 })
@@ -95,15 +81,6 @@ export const AddBoardContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-
-export const StyledSpan = styled.span``
-
-export const StyledIconButton = styled(IconButton)`
-  & > svg {
-    font-size: 2.4rem;
-  }
-`
-
 export const List = styled.div`
   display: flex;
   flex-direction: column;

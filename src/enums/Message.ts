@@ -13,7 +13,9 @@ export enum ErrorMessage {
 }
 
 export enum LabelMessage {
-  AddTask = 'Enter task title',
+  EnterTaskTitle = 'Enter task title',
+  AddTask = 'Add Task',
+  AddList = 'Add List',
   EnterListTitle = 'Enter list title',
   BoardTitle = 'Board title',
   DeleteBoard = 'Delete board',

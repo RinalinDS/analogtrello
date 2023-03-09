@@ -2,10 +2,9 @@ import React, { FC, memo, useCallback } from 'react'
 import styled from 'styled-components'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
-import IconButton from '@mui/material/IconButton'
-
 import { deleteTask } from '../../../store/reducers/tasksReducer'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { StyledIconButton, Text } from '../../../common/shared/style'
 
 type TaskPropsType = {
   cardId: number
@@ -21,7 +20,7 @@ export const Task: FC<TaskPropsType> = memo(({ title, id, cardId }) => {
 
   return (
     <Item>
-      <Text>{title}</Text>
+      <TextTask>{title}</TextTask>
       <StyledIconButton onClick={onDeleteButtonClick}>
         <CloseSharpIcon />
       </StyledIconButton>
@@ -29,8 +28,7 @@ export const Task: FC<TaskPropsType> = memo(({ title, id, cardId }) => {
   )
 })
 
-export const Text = styled.span`
-  word-break: break-word;
+export const TextTask = styled(Text)`
   padding-right: 5rem;
 `
 
@@ -54,11 +52,5 @@ export const Item = styled.div`
 
   &:hover button {
     display: inline-flex;
-  }
-`
-
-export const StyledIconButton = styled(IconButton)`
-  & > svg {
-    font-size: 2rem;
   }
 `

@@ -7,12 +7,12 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { selectTasksByCardId } from '../../store/selectors/cardsSelector'
 import { addCard, fetchCards } from '../../store/reducers/cardsReducer'
-import { LabelMessage } from '../../enums/Message'
 import { Card } from '../Card'
-import { AddListForm } from '../../common/AddItemForm/AddListForm'
 import { BoardType } from '../../types/BoardsType'
 import { selectCurrentBoard } from '../../store/selectors/boardsSelector'
 import { setTheme } from '../../store/reducers/appReducer'
+import { AddItemForm } from '../../common/AddItemForm'
+import { LabelMessage } from '../../enums/Message'
 
 export const Board: FC = memo(() => {
   const { id } = useParams()
@@ -51,15 +51,23 @@ export const Board: FC = memo(() => {
           <Card id={m.id} title={m.title} key={m.id} />
         ))}
       </CardsContainer>
-      <AddListForm
+      {/*<AddListForm*/}
+      {/*  callBack={addCardHandler}*/}
+      {/*  label={LabelMessage.EnterListTitle}*/}
+      {/*  isListEmpty={cards.length < 1}*/}
+      {/*/>*/}
+      <AddItemForm
         callBack={addCardHandler}
         label={LabelMessage.EnterListTitle}
-        isListEmpty={cards.length < 1}
+        btnText={cards.length < 1 ? 'Add a list' : 'Add another list'}
+        submitBtnText={LabelMessage.AddList}
+        component={'input'}
+        list={true}
       />
     </BoardContainer>
   )
 })
-//<{ bgColor: string | undefined }>
+
 export const BoardContainer = styled.div`
   display: flex;
   gap: 1rem;

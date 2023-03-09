@@ -8,7 +8,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import AddIcon from '@mui/icons-material/Add'
 
 import { LabelMessage } from '../../enums/Message'
-import { AddItemForm } from '../AddItemForm/AddBoardForm'
+import { AddBoardForm } from '../AddItemForm/AddBoardForm'
 
 type menuType = {
   onClick: () => void
@@ -40,7 +40,7 @@ export const BasicMenu: FC<{
   }
   return (
     <div>
-      <StyledBtn
+      <StyledMenuBtn
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
@@ -52,9 +52,8 @@ export const BasicMenu: FC<{
         ) : (
           <StyledMoreIcon fontSize={'large'} color={'action'} />
         )}
-      </StyledBtn>
+      </StyledMenuBtn>
       <StyledMenu
-        plus={plus}
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
@@ -64,13 +63,13 @@ export const BasicMenu: FC<{
         }}
       >
         <StyledMenuItem onClick={onClickHandler}>{menuList?.title}</StyledMenuItem>
-        {plus && <AddItemForm callBack={addBoard} label={LabelMessage.BoardTitle} />}
+        {plus && <AddBoardForm callBack={addBoard} label={LabelMessage.BoardTitle} />}
       </StyledMenu>
     </div>
   )
 })
 
-const StyledBtn = styled(Button)`
+const StyledMenuBtn = styled(Button)`
   cursor: pointer;
 
   &:hover {
@@ -82,8 +81,7 @@ const StyledBtn = styled(Button)`
     font-size: 2.4rem;
   }
 `
-const StyledMenu = styled(Menu)<{ plus: boolean | undefined }>`
-  padding: ${({ plus }) => (plus ? '2rem' : '')};
+const StyledMenu = styled(Menu)`
   z-index: 5;
 `
 
