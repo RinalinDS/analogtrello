@@ -1,9 +1,23 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
+import { LinearProgress } from '@mui/material'
+
+import { Text } from '../../common/shared/style'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import { selectIsLoading } from '../../store/selectors/appSelector'
+
 export const Header = memo(() => {
-  return <HeaderContainer>hello</HeaderContainer>
+  const isDataLoading = useAppSelector(selectIsLoading)
+
+  return (
+    <HeaderContainer>
+      {isDataLoading && <LinearProgress color={'secondary'} />}
+      <Text whiteText>hello</Text>
+    </HeaderContainer>
+  )
 })
+
 export const HeaderContainer = styled.header`
   grid-column-start: span 2;
   color: white;
