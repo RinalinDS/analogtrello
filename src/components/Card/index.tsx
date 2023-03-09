@@ -45,4 +45,5 @@ export const CardContent = styled.div`
   max-height: 100%;
   position: relative;
   white-space: normal;
+  font-size: 1.4rem;
 `

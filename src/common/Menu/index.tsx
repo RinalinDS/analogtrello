@@ -72,9 +72,10 @@ export const BasicMenu: FC<{
 const StyledMenuBtn = styled(Button)`
   cursor: pointer;
 
-  &:hover {
-    background: rgba(126, 213, 111, 0.8) !important;
-    border-radius: 9px;
+  div &:hover {
+    background: rgba(253, 242, 233, 0.5);
+    min-width: 3.2rem;
+    border-radius: 50%;
   }
 
   & > svg {
@@ -88,5 +89,7 @@ const StyledMenu = styled(Menu)`
 const StyledMoreIcon = styled(MoreHorizIcon)``
 const StyledAddIcon = styled(AddIcon)``
 const StyledMenuItem = styled(MenuItem)`
-  font-size: 1.4rem !important;
+  div & {
+    font-size: 1.4rem;
+  }
 `

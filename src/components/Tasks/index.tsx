@@ -42,6 +42,7 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
         component={'textarea'}
         submitBtnText={LabelMessage.AddTask}
         btnText={LabelMessage.AddTask}
+        list={false}
       />
     </>
   )

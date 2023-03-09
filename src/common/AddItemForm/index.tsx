@@ -47,12 +47,12 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(
         validationSchema={schema}
       >
         {({ values, errors }) => (
-          <StyledForm list={list}>
+          <StyledForm list={!!list}>
             <StyledField
               name="title"
               placeholder={label}
               component={component}
-              autocomplete="off"
+              autoComplete={'off'}
             />
             <ButtonContainer>
               <SubmitButton disabled={!values.title || !!errors.title} type={'submit'}>
@@ -66,7 +66,7 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(
         )}
       </Formik>
     ) : (
-      <AddItemContainer onClick={openForm} list={list}>
+      <AddItemContainer onClick={openForm} list={!!list}>
         <Text whiteText={!!list}>&#43; {btnText}</Text>
       </AddItemContainer>
     )
@@ -78,6 +78,3 @@ const StyledForm = styled(Form)<{ list?: boolean }>`
   width: ${props => (props.list ? '20rem' : '100%')};
   background: ${props => (props.list ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
 `
-// background-color: rgba(152, 149, 149, 0.47);
-// padding: 0.6rem;
-// width: 20rem;

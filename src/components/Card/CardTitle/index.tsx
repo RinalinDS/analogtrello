@@ -52,6 +52,7 @@ const StyledTitle = styled.h3`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1.6rem;
 `
 
 const StyledTextarea = styled.textarea`
