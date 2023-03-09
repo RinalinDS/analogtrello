@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { DeleteTaskPayloadType, TaskType } from '../../types/BoardsType'
 
+import { deleteCardFulfilled } from './cardsReducer'
+
 export type TasksReducerStateType = {
   tasks: {
     [key: number]: TaskType[]
@@ -28,6 +30,11 @@ const slice = createSlice({
       const index = state.tasks[action.payload.cardId].findIndex(f => f.id === action.payload.id)
       state.tasks[action.payload.cardId].splice(index, 1)
     },
+  },
+  extraReducers: builder => {
+    builder.addCase(deleteCardFulfilled, (state, action) => {
+      delete state.tasks[action.payload.id]
+    })
   },
 })
 
