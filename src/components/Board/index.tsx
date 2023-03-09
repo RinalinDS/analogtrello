@@ -12,13 +12,14 @@ import { Card } from '../Card'
 import { AddListForm } from '../../common/AddItemForm/AddListForm'
 import { BoardType } from '../../types/BoardsType'
 import { selectCurrentBoard } from '../../store/selectors/boardsSelector'
-import { setCurrentBoard } from '../../store/reducers/boardsReducer'
+import { setTheme } from '../../store/reducers/appReducer'
 
 export const Board: FC = memo(() => {
   const { id } = useParams()
   const dispatch = useAppDispatch()
+
   const cards = useAppSelector(state => selectTasksByCardId(state, id))
-  const currentBoard = useAppSelector<BoardType>(selectCurrentBoard)
+  const currentBoard = useAppSelector<BoardType | undefined>(state => selectCurrentBoard(state, id))
 
   const addCardHandler = useCallback(
     (title: string) => {
@@ -29,14 +30,22 @@ export const Board: FC = memo(() => {
   )
 
   useEffect(() => {
+    if (currentBoard?.id) {
+      dispatch(setTheme({ background: currentBoard?.color }))
+    }
+  }, [currentBoard, dispatch])
+
+  useEffect(() => {
+    // currentBoard.id ?
     if (id) {
       dispatch(fetchCards({ id: +id }))
-      dispatch(setCurrentBoard({ id: +id }))
     }
   }, [id, dispatch])
 
+  // bgColor={currentBoard?.color}
+
   return (
-    <BoardContainer bgColor={currentBoard?.color}>
+    <BoardContainer>
       <CardsContainer>
         {cards.map(m => (
           <Card id={m.id} title={m.title} key={m.id} />
@@ -50,14 +59,15 @@ export const Board: FC = memo(() => {
     </BoardContainer>
   )
 })
-
-export const BoardContainer = styled.div<{ bgColor: string | undefined }>`
+//<{ bgColor: string | undefined }>
+export const BoardContainer = styled.div`
   display: flex;
   gap: 1rem;
   align-items: flex-start;
   padding: 1.2rem 2.4rem;
   height: 100%;
-  background: ${props => props.bgColor || 'lightblue'};
+  background: ${props => props.theme.background || 'lightblue'};
+  color: ${props => props.theme.color || 'black'};
 `
 export const CardsContainer = styled.div`
   display: flex;

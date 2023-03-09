@@ -1,46 +1,42 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
 import IconButton from '@mui/material/IconButton'
 
-import AddIcon from '@mui/icons-material/Add'
-
-import { Link, useNavigate } from 'react-router-dom'
-
-import CloseSharpIcon from '@mui/icons-material/CloseSharp'
-
-import { Modal } from '../../common/Modal'
+import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 
-import { AddItemForm } from '../../common/AddItemForm/AddBoardForm'
-
 import { BoardType } from '../../types/BoardsType'
 import { addBoard, deleteBoard, fetchBoards } from '../../store/reducers/boardsReducer'
 
-import { selectBoards, selectCurrentBoard } from '../../store/selectors/boardsSelector'
-import { LabelMessage } from '../../enums/Message'
-import { ServicePath } from '../../enums/ServicePath'
+import { selectBoards, selectCurrentBoardId } from '../../store/selectors/boardsSelector'
 import { RoutesPath } from '../../enums/RoutesPath'
 
+import { BasicMenu } from '../../common/Menu'
+
+import { BoardLink } from './BoardLink'
+
 export const Sidebar = memo(() => {
-  const [isModalActive, setIsModalActive] = useState(false)
+  // const [isAddModalActive, setIsAddModalActive] = useState(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
-  const currentBoard = useAppSelector<BoardType>(selectCurrentBoard)
+  const currentBoardId = useAppSelector<number | null>(selectCurrentBoardId)
 
   const addBoardHandler = useCallback(
     (title: string, color: string) => {
       const id = +new Date()
       dispatch(addBoard({ id, title, color }))
-      setIsModalActive(false)
+      // dispatch(setCurrentBoardId({ id }))
+      // navigate(`boards/${id}`)
+      // setIsAddModalActive(false)
     },
     [dispatch],
   )
 
-  const activateModal = useCallback(() => setIsModalActive(true), [])
+  // const activateModal = useCallback(() => setIsAddModalActive(true), [])
 
   const onDeleteButtonClick = useCallback(
     (id: number) => {
@@ -54,35 +50,33 @@ export const Sidebar = memo(() => {
     dispatch(fetchBoards())
   }, [dispatch])
 
-  //TODO separate for map component
-
   return (
     <SidebarContainer>
       <AddBoardContainer>
         <StyledSpan>Your boards</StyledSpan>
-        <StyledIconButton onClick={activateModal}>
-          <AddIcon />
-        </StyledIconButton>
+        <BasicMenu plus addBoardHandler={addBoardHandler} />
+        {/*<StyledIconButton onClick={activateModal}>*/}
+        {/*  <AddIcon />*/}
+        {/*</StyledIconButton>*/}
       </AddBoardContainer>
       <List>
         {boards.map((m, _i) => {
           return (
-            <Item key={m.id} active={currentBoard?.id === m.id}>
-              <Link to={`${ServicePath.boards}/${m.id}`}>{m.title}</Link>
-              <StyledIconButton
-                onClick={() => {
-                  onDeleteButtonClick(m.id)
-                }}
-              >
-                <CloseSharpIcon />
-              </StyledIconButton>
-            </Item>
+            <BoardLink
+              active={currentBoardId === m.id}
+              key={m.id}
+              title={m.title}
+              id={m.id}
+              onDeleteButtonClick={onDeleteButtonClick}
+            />
           )
         })}
       </List>
-      <Modal setIsModalVisible={setIsModalActive} visible={isModalActive}>
-        <AddItemForm callBack={addBoardHandler} label={LabelMessage.BoardTitle} />
-      </Modal>
+      {/*/!*<Modal setIsModalVisible={setIsAddModalActive} visible={isAddModalActive}>*!/*/}
+      {/*<BasicMenu>*/}
+      {/*  <AddItemForm callBack={addBoardHandler} label={LabelMessage.BoardTitle} />*/}
+      {/*</BasicMenu>*/}
+      {/*/!*</Modal>*!/*/}
     </SidebarContainer>
   )
 })
@@ -90,7 +84,7 @@ export const Sidebar = memo(() => {
 export const SidebarContainer = styled.div`
   grid-row-start: span 2;
   width: 26rem;
-  background: green;
+  background: ${props => props.theme.background || 'green'};
   height: 100%;
   border-right: 1px solid white;
   padding: 1.2rem 2.4rem;
@@ -127,16 +121,5 @@ export const List = styled.div`
   }
 
   & a:active {
-  }
-`
-
-export const Item = styled.div<{ active: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: ${({ active }) => (active ? 'rgba(173, 216, 230, 0.6)' : '')};
-
-  &:hover {
-    background: rgba(173, 216, 230, 0.35);
   }
 `

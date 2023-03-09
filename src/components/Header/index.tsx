@@ -6,7 +6,7 @@ export const Header = memo(() => {
 })
 export const HeaderContainer = styled.header`
   grid-column-start: span 2;
-  background: #343a40;
   color: white;
   border-bottom: 1px solid white;
+  background: ${props => props.theme.background || '#343a40'};
 `
