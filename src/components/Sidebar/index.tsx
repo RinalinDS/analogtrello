@@ -7,9 +7,19 @@ import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 
 import { BoardType } from '../../types/BoardsType'
-import { addBoard, deleteBoard, fetchBoards } from '../../store/reducers/boardsReducer'
+import {
+  addBoard,
+  deleteBoard,
+  fetchBoards,
+  setCurrentBoardId,
+  toggleFlagNewBoard,
+} from '../../store/reducers/boardsReducer'
 
-import { selectBoards, selectCurrentBoardId } from '../../store/selectors/boardsSelector'
+import {
+  selectBoards,
+  selectCurrentBoardId,
+  selectFlag,
+} from '../../store/selectors/boardsSelector'
 import { RoutesPath } from '../../enums/RoutesPath'
 
 import { BasicMenu } from '../../common/Menu'
@@ -23,6 +33,7 @@ export const Sidebar = memo(() => {
   const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
   const currentBoardId = useAppSelector<number | null>(selectCurrentBoardId)
+  const flag = useAppSelector<boolean>(selectFlag)
 
   const addBoardHandler = useCallback(
     (title: string, color: string) => {
@@ -43,6 +54,14 @@ export const Sidebar = memo(() => {
   useEffect(() => {
     dispatch(fetchBoards())
   }, [dispatch])
+
+  useEffect(() => {
+    if (flag && boards.length) {
+      dispatch(setCurrentBoardId({ id: boards.at(-1)?.id! }))
+      navigate(`/boards/${boards.at(-1)?.id}`)
+      dispatch(toggleFlagNewBoard(false))
+    }
+  }, [flag])
 
   return (
     <SidebarContainer>

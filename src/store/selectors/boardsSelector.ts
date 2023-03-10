@@ -3,6 +3,7 @@ import { createSelector } from 'reselect'
 import { AppRootStateType } from '../index'
 
 export const selectBoards = (state: AppRootStateType) => state.boards.boards
+export const selectFlag = (state: AppRootStateType) => state.boards.newBoardCreated
 export const selectCurrentBoardId = (state: AppRootStateType) => state.boards.currentBoardId
 
 export const selectCurrentBoard = createSelector(

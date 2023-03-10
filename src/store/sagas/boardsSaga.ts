@@ -12,6 +12,7 @@ import {
   deleteBoardFulfilled,
   fetchBoards,
   fetchBoardsFulfilled,
+  toggleFlagNewBoard,
 } from '../reducers/boardsReducer'
 import { requestFinally, requestInitiated } from '../reducers/appReducer'
 import { ErrorMessage, SuccessMessage } from '../../enums/Message'
@@ -36,6 +37,7 @@ export function* addBoardWorker(action: PayloadAction<BoardType>) {
     const res: AxiosResponse<BoardType> = yield call(Service.addBoard, action.payload)
     yield put(addBoardFulfilled(res.data))
     yield put(addSuccessMsg(SuccessMessage.Board))
+    yield put(toggleFlagNewBoard(true))
   } catch (e) {
     const error = e as AxiosError<{ message: string }>
     yield put(addErrorMsg(error?.response?.data?.message || ErrorMessage.Some))

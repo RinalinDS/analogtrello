@@ -74,8 +74,7 @@ const StyledMenuBtn = styled(Button)`
 
   div &:hover {
     background: rgba(253, 242, 233, 0.5);
-    min-width: 3.2rem;
-    border-radius: 50%;
+    border-radius: 11px;
   }
 
   & > svg {
