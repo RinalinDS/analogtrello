@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useState } from 'react'
+import React, { FC, memo, useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 
 import { Form, Formik } from 'formik'
@@ -22,6 +22,7 @@ type AddItemFormPropsType = {
   btnText: string
   component: string
   list?: boolean
+  id?: number
 }
 
 const schema = Yup.object().shape({
@@ -29,10 +30,14 @@ const schema = Yup.object().shape({
 })
 
 export const AddItemForm: FC<AddItemFormPropsType> = memo(
-  ({ callBack, label, component, submitBtnText, list, btnText }) => {
+  ({ callBack, label, component, submitBtnText, list, btnText, id }) => {
     const [edit, setEdit] = useState<boolean>(false)
     const closeForm = useCallback(() => setEdit(false), [])
     const openForm = useCallback(() => setEdit(true), [])
+
+    useEffect(() => {
+      setEdit(false)
+    }, [id])
 
     return edit ? (
       <Formik

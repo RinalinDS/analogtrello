@@ -32,9 +32,15 @@ const slice = createSlice({
     setTheme: (state, action: PayloadAction<{ background: string }>) => {
       state.theme.background = action.payload.background
     },
+    clearTheme: state => {
+      state.theme = {
+        background: '',
+        color: '',
+      }
+    },
   },
 })
 
 export const appReducer = slice.reducer
 
-export const { requestFinally, requestInitiated, setTheme } = slice.actions
+export const { requestFinally, requestInitiated, setTheme, clearTheme } = slice.actions

@@ -26,6 +26,8 @@ import { BasicMenu } from '../../common/Menu'
 
 import { Text } from '../../common/shared/style'
 
+import { clearTheme } from '../../store/reducers/appReducer'
+
 import { BoardLink } from './BoardLink'
 
 export const Sidebar = memo(() => {
@@ -46,9 +48,12 @@ export const Sidebar = memo(() => {
   const onDeleteButtonClick = useCallback(
     (id: number) => {
       dispatch(deleteBoard({ id }))
-      navigate(RoutesPath.index)
+      if (id === currentBoardId) {
+        navigate(RoutesPath.index)
+        dispatch(clearTheme())
+      }
     },
-    [navigate, dispatch],
+    [navigate, dispatch, currentBoardId],
   )
 
   useEffect(() => {

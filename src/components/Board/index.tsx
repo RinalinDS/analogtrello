@@ -68,6 +68,7 @@ export const Board: FC = memo(() => {
         submitBtnText={LabelMessage.AddList}
         component={'input'}
         list={true}
+        id={+id!}
       />
     </BoardContainer>
   )
