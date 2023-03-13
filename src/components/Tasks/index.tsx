@@ -33,7 +33,7 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
     <>
       <TasksContainer>
         {tasks.map(m => (
-          <Task key={m.id} title={m.title} id={m.id} cardId={cardId} />
+          <Task task={m} key={m.id} />
         ))}
       </TasksContainer>
       <AddItemForm

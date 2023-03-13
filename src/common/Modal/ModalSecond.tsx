@@ -1,13 +1,13 @@
-import React, { FC, memo, SyntheticEvent, useCallback, useEffect } from 'react'
+import React, { FC, memo, MouseEvent, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-type DeleteModalPropsType = {
+type PortalModalPropsType = {
   visible: boolean
   setIsModalVisible: (value: boolean) => void
   children: React.ReactNode
 }
 
-export const DeleteModal: FC<DeleteModalPropsType> = memo(
+export const SecondModal: FC<PortalModalPropsType> = memo(
   ({ visible, children, setIsModalVisible }) => {
     const onClickHandler = useCallback(() => {
       setIsModalVisible(false)
@@ -22,9 +22,9 @@ export const DeleteModal: FC<DeleteModalPropsType> = memo(
       [setIsModalVisible],
     )
 
-    const stopPropagationHandler = useCallback((e: SyntheticEvent) => {
-      e.stopPropagation()
-    }, [])
+    // const stopPropagationHandler = useCallback((e: MouseEvent) => {
+    //   e.stopPropagation()
+    // }, [])
 
     useEffect(() => {
       window.addEventListener('keydown', onEscPressHandler)
@@ -33,14 +33,19 @@ export const DeleteModal: FC<DeleteModalPropsType> = memo(
       }
     }, [setIsModalVisible, onEscPressHandler])
 
-    if (!visible) return null
+    if (visible) {
+      return (
+        <>
+          <ModalOverlay onClick={onClickHandler} />
 
-    return (
-      <>
-        <ModalOverlay onClick={onClickHandler} />
-        <ModalContainer onClick={stopPropagationHandler}>{children}</ModalContainer>
-      </>
-    )
+          <ModalContainer>
+            <ModalCloseButton onClick={onClickHandler}>&times;</ModalCloseButton>
+            {children}
+          </ModalContainer>
+        </>
+      )
+    }
+    return null
   },
 )
 
@@ -50,12 +55,27 @@ export const ModalOverlay = styled.div`
   top: 0;
   bottom: 0;
   right: 0;
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1000;
 `
 export const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: #ffffff;
+  padding: 4rem;
+  z-index: 1001;
+  color: #333333;
+`
+
+export const ModalCloseButton = styled.button`
   position: absolute;
-  top: 100%;
-  right: -75%;
-  z-index: 9999;
+  top: -6px;
+  right: 6px;
+  font-size: 3rem;
+  color: #333;
+  cursor: pointer;
+  border: none;
+  background: none;
 `

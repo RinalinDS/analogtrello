@@ -1,32 +1,49 @@
-import React, { FC, memo, useCallback } from 'react'
+import React, { FC, memo, MouseEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
+import { StyledIconButton, Text } from '../../../common/shared/style'
+import { TaskType } from '../../../types/BoardsType'
 import { deleteTask } from '../../../store/reducers/tasksReducer'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { StyledIconButton, Text } from '../../../common/shared/style'
+import { Modal } from '../../../common/Modal'
+import { SecondModal } from '../../../common/Modal/ModalSecond'
 
 type TaskPropsType = {
-  cardId: number
-  title: string
-  id: number
+  task: TaskType
 }
 
-export const Task: FC<TaskPropsType> = memo(({ title, id, cardId }) => {
+export const Task: FC<TaskPropsType> = ({ task }) => {
   const dispatch = useAppDispatch()
-  const onDeleteButtonClick = useCallback(() => {
-    dispatch(deleteTask({ id, cardId }))
-  }, [cardId, dispatch, id])
+  const [isVisible, setIsVisible] = useState<boolean>(false)
+
+  const toggleModal = (e: MouseEvent) => {
+    e.stopPropagation()
+    setIsVisible(true)
+  }
+
+  const { id, title, cardId } = task
+
+  const onDeleteButtonClick = useCallback(
+    (e: MouseEvent) => {
+      e.stopPropagation()
+      dispatch(deleteTask({ id, cardId }))
+    },
+    [cardId, dispatch, id],
+  )
 
   return (
-    <Item>
+    <Item onClick={toggleModal}>
       <TextTask>{title}</TextTask>
       <StyledIconButton onClick={onDeleteButtonClick}>
         <CloseSharpIcon />
       </StyledIconButton>
+      <Modal setIsModalVisible={setIsVisible} visible={isVisible}>
+        <div>IT'S A DISASTAH</div>
+      </Modal>
     </Item>
   )
-})
+}
 
 export const TextTask = styled(Text)`
   padding-right: 5rem;

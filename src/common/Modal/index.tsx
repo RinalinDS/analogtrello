@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect } from 'react'
+import React, { FC, memo, MouseEvent, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
@@ -10,8 +10,11 @@ type PortalModalPropsType = {
 
 export const Modal: FC<PortalModalPropsType> = memo(({ visible, children, setIsModalVisible }) => {
   const onClickHandler = useCallback(() => {
+    console.log('ONCLICKHANDLER')
     setIsModalVisible(false)
   }, [setIsModalVisible])
+
+  console.log(visible)
 
   const root = document.querySelector('body')
 
@@ -24,6 +27,10 @@ export const Modal: FC<PortalModalPropsType> = memo(({ visible, children, setIsM
     [setIsModalVisible],
   )
 
+  const stopPropagationHandler = useCallback((e: MouseEvent) => {
+    e.stopPropagation()
+  }, [])
+
   useEffect(() => {
     window.addEventListener('keydown', onEscPressHandler)
     return () => {
@@ -35,7 +42,7 @@ export const Modal: FC<PortalModalPropsType> = memo(({ visible, children, setIsM
     return createPortal(
       <>
         <ModalOverlay onClick={onClickHandler} />
-        <ModalContainer>
+        <ModalContainer onClick={stopPropagationHandler}>
           <ModalCloseButton onClick={onClickHandler}>&times;</ModalCloseButton>
           {children}
         </ModalContainer>
@@ -52,18 +59,18 @@ export const ModalOverlay = styled.div`
   top: 0;
   bottom: 0;
   right: 0;
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1000;
 `
 export const ModalContainer = styled.div`
-  background: #ffffff;
-  color: #333333;
-  padding: 2rem;
   position: fixed;
-  bottom: 3rem;
-  left: 26rem;
-  z-index: 9999;
-  height: 38rem;
-  width: 22rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 4rem;
+  z-index: 1001;
+  color: #333333;
 `
 
 export const ModalCloseButton = styled.button`
