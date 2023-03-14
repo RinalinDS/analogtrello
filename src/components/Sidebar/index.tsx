@@ -12,13 +12,13 @@ import {
   deleteBoard,
   fetchBoards,
   setCurrentBoardId,
-  toggleFlagNewBoard,
+  toggleIsNewBoardCreated,
 } from '../../store/reducers/boardsReducer'
 
 import {
   selectBoards,
   selectCurrentBoardId,
-  selectFlag,
+  selectIsNewBoardCreated,
 } from '../../store/selectors/boardsSelector'
 import { RoutesPath } from '../../enums/RoutesPath'
 
@@ -28,6 +28,11 @@ import { Text } from '../../common/shared/style'
 
 import { clearTheme } from '../../store/reducers/appReducer'
 
+import { ServicePath } from '../../enums/ServicePath'
+
+import { LabelMessage } from '../../enums/Message'
+import { AddBoardForm } from '../../common/AddForms/AddBoardForm'
+
 import { BoardLink } from './BoardLink'
 
 export const Sidebar = memo(() => {
@@ -35,22 +40,28 @@ export const Sidebar = memo(() => {
   const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
   const currentBoardId = useAppSelector<number | null>(selectCurrentBoardId)
-  const flag = useAppSelector<boolean>(selectFlag)
+  const isNewBoardCreated = useAppSelector<boolean>(selectIsNewBoardCreated)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
+  const lastBoardId = boards.at(-1)?.id
+  const newBoardUrl = `${ServicePath.boards}/${lastBoardId}`
 
   const addBoardHandler = useCallback(
     (title: string, color: string) => {
       const id = +new Date()
       dispatch(addBoard({ id, title, color }))
+      setAnchorEl(null)
     },
     [dispatch],
   )
 
-  const onDeleteButtonClick = useCallback(
+  const deleteBoardHandler = useCallback(
     (id: number) => {
       dispatch(deleteBoard({ id }))
       if (id === currentBoardId) {
         navigate(RoutesPath.index)
         dispatch(clearTheme())
+        dispatch(setCurrentBoardId(null))
       }
     },
     [navigate, dispatch, currentBoardId],
@@ -61,18 +72,20 @@ export const Sidebar = memo(() => {
   }, [dispatch])
 
   useEffect(() => {
-    if (flag && boards.length) {
-      dispatch(setCurrentBoardId({ id: boards.at(-1)?.id! }))
-      navigate(`/boards/${boards.at(-1)?.id}`)
-      dispatch(toggleFlagNewBoard(false))
+    if (isNewBoardCreated && boards.length) {
+      dispatch(setCurrentBoardId(lastBoardId!))
+      navigate(newBoardUrl)
+      dispatch(toggleIsNewBoardCreated(false))
     }
-  }, [flag])
+  }, [isNewBoardCreated, boards, dispatch, navigate, lastBoardId, newBoardUrl])
 
   return (
     <SidebarContainer>
       <AddBoardContainer>
         <Text>Your boards</Text>
-        <BasicMenu plus addBoardHandler={addBoardHandler} />
+        <BasicMenu iconType={'plus'} anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
+          <AddBoardForm callBack={addBoardHandler} label={LabelMessage.BoardTitle} />
+        </BasicMenu>
       </AddBoardContainer>
       <List>
         {boards.map((m, _i) => {
@@ -82,7 +95,7 @@ export const Sidebar = memo(() => {
               key={m.id}
               title={m.title}
               id={m.id}
-              onDeleteButtonClick={onDeleteButtonClick}
+              onDeleteButtonClick={deleteBoardHandler}
             />
           )
         })}
