@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 
 import styled from 'styled-components'
 
+import MenuItem from '@mui/material/MenuItem'
+
 import { ServicePath } from '../../../enums/ServicePath'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { setCurrentBoardId } from '../../../store/reducers/boardsReducer'
 import { BasicMenu } from '../../../common/Menu'
 import { LabelMessage } from '../../../enums/Message'
 
@@ -17,32 +17,37 @@ type PropsType = {
 }
 
 export const BoardLink: FC<PropsType> = memo(({ active, id, title, onDeleteButtonClick }) => {
-  const dispatch = useAppDispatch()
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const deleteClickHandler = useCallback(() => {
     onDeleteButtonClick(id)
+    setAnchorEl(null)
   }, [id, onDeleteButtonClick])
 
-  const onClickHandler = () => dispatch(setCurrentBoardId({ id: +id }))
-
   return (
-    <Item active={active}>
-      <Link to={`${ServicePath.boards}/${id}`} onClick={onClickHandler}>
-        {title}
-      </Link>
-      <BasicMenu menuList={{ onClick: deleteClickHandler, title: LabelMessage.DeleteBoard }} />
+    <Item isActive={active}>
+      <Link to={`${ServicePath.boards}/${id}`}>{title}</Link>
+      <BasicMenu iconType={'more'} setAnchorEl={setAnchorEl} anchorEl={anchorEl}>
+        <StyledMenuItem onClick={deleteClickHandler}>{LabelMessage.DeleteBoard}</StyledMenuItem>
+      </BasicMenu>
     </Item>
   )
 })
 
-export const Item = styled.div<{ active: boolean }>`
+export const Item = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: ${({ active }) => (active ? 'rgba(173, 216, 230, 0.6)' : '')};
+  background: ${({ isActive }) => (isActive ? 'rgba(173, 216, 230, 0.6)' : '')};
   position: relative;
 
   &:hover {
     background: rgba(173, 216, 230, 0.35);
+  }
+`
+
+const StyledMenuItem = styled(MenuItem)`
+  div & {
+    font-size: 1.4rem;
   }
 `
