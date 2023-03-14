@@ -13,15 +13,15 @@ import {
   StyledField,
   SubmitButton,
   Text,
-} from '../shared/style'
+} from '../../shared/style'
 
-type AddItemFormPropsType = {
+type AddTasksAndCardsFormPropsType = {
   callBack: (title: string) => void
   label: string
   submitBtnText: string
   btnText: string
   component: string
-  list?: boolean
+  isForAddingCard?: boolean
   id?: number
 }
 
@@ -29,8 +29,8 @@ const schema = Yup.object().shape({
   title: Yup.string().trim().min(1, 'Too Short!').max(50, 'Too Long!').required('Required'),
 })
 
-export const AddItemForm: FC<AddItemFormPropsType> = memo(
-  ({ callBack, label, component, submitBtnText, list, btnText, id }) => {
+export const AddTasksAndCardsForm: FC<AddTasksAndCardsFormPropsType> = memo(
+  ({ callBack, label, component, submitBtnText, isForAddingCard, btnText, id }) => {
     const [edit, setEdit] = useState<boolean>(false)
     const closeForm = useCallback(() => setEdit(false), [])
     const openForm = useCallback(() => setEdit(true), [])
@@ -52,7 +52,7 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(
         validationSchema={schema}
       >
         {({ values, errors }) => (
-          <StyledForm list={!!list}>
+          <StyledForm $isForAddingCard={isForAddingCard}>
             <StyledField
               name="title"
               placeholder={label}
@@ -71,15 +71,15 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(
         )}
       </Formik>
     ) : (
-      <AddItemContainer onClick={openForm} list={!!list}>
-        <Text whiteText={!!list}>&#43; {btnText}</Text>
+      <AddItemContainer onClick={openForm} $isForAddingCard={isForAddingCard}>
+        <Text whiteText={isForAddingCard}>&#43; {btnText}</Text>
       </AddItemContainer>
     )
   },
 )
 
-const StyledForm = styled(Form)<{ list?: boolean }>`
-  padding: ${props => (props.list ? '0.6rem' : '')};
-  width: ${props => (props.list ? '20rem' : '100%')};
-  background: ${props => (props.list ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
+const StyledForm = styled(Form)<{ $isForAddingCard?: boolean }>`
+  padding: ${props => (props.$isForAddingCard ? '0.6rem' : '')};
+  width: ${props => (props.$isForAddingCard ? '20rem' : '100%')};
+  background: ${props => (props.$isForAddingCard ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
 `

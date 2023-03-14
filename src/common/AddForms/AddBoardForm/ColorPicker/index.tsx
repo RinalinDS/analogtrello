@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useCallback } from 'react'
 import styled from 'styled-components'
 
 type PropsType = {
@@ -31,10 +31,10 @@ export const ColorPicker: FC<PropsType> = memo(({ colors, setActiveColor, active
   )
 })
 
-const ColorItem: FC<ColorItemPropsType> = ({ onClick, active, index, bgColor }) => {
-  const onClickHandler = () => onClick(index)
+const ColorItem: FC<ColorItemPropsType> = memo(({ onClick, active, index, bgColor }) => {
+  const onClickHandler = useCallback(() => onClick(index), [index, onClick])
   return <Item bgColor={bgColor} active={active} onClick={onClickHandler}></Item>
-}
+})
 
 export const Grid = styled.div`
   margin-top: 2rem;
