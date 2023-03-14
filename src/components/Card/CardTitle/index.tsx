@@ -1,4 +1,12 @@
-import React, { ChangeEvent, FC, memo, useCallback, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FC,
+  KeyboardEvent,
+  memo,
+  MouseEvent,
+  useCallback,
+  useState,
+} from 'react'
 import styled from 'styled-components'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
@@ -6,29 +14,60 @@ import { StyledIconButton, Text } from '../../../common/shared/style'
 
 type PropsType = {
   title: string
-  callback: () => void
+  deleteCard: () => void
   changeTitle: (title: string) => void
 }
 
-export const CardTitle: FC<PropsType> = memo(({ title, callback, changeTitle }) => {
+export const CardTitle: FC<PropsType> = memo(({ title, deleteCard, changeTitle }) => {
   const [edit, setEdit] = useState<boolean>(false)
   const [newTitle, setTitle] = useState<string>(title)
+
+  const changeTitleHandler = useCallback(() => {
+    if (newTitle !== title) {
+      const trimmedNewTitle = newTitle.trim()
+      trimmedNewTitle && changeTitle(trimmedNewTitle)
+    }
+    if (!newTitle.trim()) {
+      setTitle(title)
+    }
+  }, [newTitle, changeTitle, title])
 
   const onInputChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.currentTarget.value)
   }, [])
 
-  const onBlurHandler = useCallback(() => {
-    setEdit(false)
-    if (newTitle !== title) {
-      newTitle && changeTitle(newTitle)
-    }
-  }, [newTitle, changeTitle, title])
+  const openEdit = useCallback(() => setEdit(true), [])
+  const closeEdit = useCallback(() => setEdit(false), [])
 
-  const onClickHandler = useCallback(() => setEdit(true), [])
+  const onBlurHandler = useCallback(() => {
+    closeEdit()
+    changeTitleHandler()
+  }, [changeTitleHandler, closeEdit])
+
+  const deleteCardHandler = useCallback(
+    (e: MouseEvent) => {
+      e.stopPropagation()
+      deleteCard()
+    },
+    [deleteCard],
+  )
+
+  const escapeAndEnterHandler = useCallback(
+    (e: KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === 'Escape') {
+        closeEdit()
+        setTitle(title)
+      }
+      if (e.key === 'Enter') {
+        closeEdit()
+        changeTitleHandler()
+      }
+    },
+    [changeTitleHandler, closeEdit, title],
+  )
 
   return (
-    <StyledTitle onClick={onClickHandler}>
+    <StyledTitle onClick={openEdit}>
       {edit ? (
         <StyledTextarea
           value={newTitle}
@@ -36,11 +75,12 @@ export const CardTitle: FC<PropsType> = memo(({ title, callback, changeTitle }) 
           spellCheck={false}
           onBlur={onBlurHandler}
           autoFocus
+          onKeyDown={escapeAndEnterHandler}
         />
       ) : (
         <Text>{title}</Text>
       )}
-      <StyledIconButton onClick={callback}>
+      <StyledIconButton onClick={deleteCardHandler}>
         <CloseSharpIcon />
       </StyledIconButton>
     </StyledTitle>
