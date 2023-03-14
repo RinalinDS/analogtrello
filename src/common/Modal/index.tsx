@@ -1,49 +1,42 @@
-import React, { FC, memo, MouseEvent, useCallback, useEffect } from 'react'
+import React, { FC, memo, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 type PortalModalPropsType = {
   visible: boolean
-  setIsModalVisible: (value: boolean) => void
+  setIsVisible: (value: boolean) => void
   children: React.ReactNode
 }
 
-export const Modal: FC<PortalModalPropsType> = memo(({ visible, children, setIsModalVisible }) => {
-  const onClickHandler = useCallback(() => {
-    console.log('ONCLICKHANDLER')
-    setIsModalVisible(false)
-  }, [setIsModalVisible])
-
-  console.log(visible)
+export const Modal: FC<PortalModalPropsType> = memo(({ visible, children, setIsVisible }) => {
+  const closeModal = useCallback(() => {
+    setIsVisible(false)
+  }, [setIsVisible])
 
   const root = document.querySelector('body')
 
-  const onEscPressHandler = useCallback(
+  const onEscPressCloseModalHandler = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsModalVisible(false)
+        closeModal()
       }
     },
-    [setIsModalVisible],
+    [closeModal],
   )
 
-  const stopPropagationHandler = useCallback((e: MouseEvent) => {
-    e.stopPropagation()
-  }, [])
-
   useEffect(() => {
-    window.addEventListener('keydown', onEscPressHandler)
+    window.addEventListener('keydown', onEscPressCloseModalHandler)
     return () => {
-      window.removeEventListener('keydown', onEscPressHandler)
+      window.removeEventListener('keydown', onEscPressCloseModalHandler)
     }
-  }, [setIsModalVisible, onEscPressHandler])
+  }, [setIsVisible, onEscPressCloseModalHandler])
 
   if (root && visible) {
     return createPortal(
       <>
-        <ModalOverlay onClick={onClickHandler} />
-        <ModalContainer onClick={stopPropagationHandler}>
-          <ModalCloseButton onClick={onClickHandler}>&times;</ModalCloseButton>
+        <ModalOverlay onClick={closeModal} />
+        <ModalContainer>
+          <ModalCloseButton onClick={closeModal}>&times;</ModalCloseButton>
           {children}
         </ModalContainer>
       </>,
