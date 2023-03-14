@@ -12,7 +12,10 @@
     ],
     "indent": [
       "warn",
-      2
+      2,
+      {
+        "SwitchCase": 1
+      }
     ],
     "import/order": [
       "error",
@@ -32,7 +35,10 @@
     ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
-      { "varsIgnorePattern": "React", "argsIgnorePattern": "^_" }
+      {
+        "varsIgnorePattern": "React",
+        "argsIgnorePattern": "^_"
+      }
     ]
   }
 }
