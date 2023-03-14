@@ -11,7 +11,7 @@ export type AppReducerStateType = {
   }
 }
 const initialState: AppReducerStateType = {
-  isLoading: false,
+  isLoading: true,
   messages: [],
   theme: {
     background: '',
