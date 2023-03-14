@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import React, { FC, memo, useCallback, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
@@ -11,15 +11,14 @@ import { Card } from '../Card'
 import { BoardType } from '../../types/BoardsType'
 import { selectCurrentBoard } from '../../store/selectors/boardsSelector'
 import { setTheme } from '../../store/reducers/appReducer'
-import { AddItemForm } from '../../common/AddItemForm'
+import { AddTasksAndCardsForm } from '../../common/AddForms/AddTasksAndCardsForm'
 import { LabelMessage } from '../../enums/Message'
-import { Preloader } from '../../common/Prealoader'
 import { RoutesPath } from '../../enums/RoutesPath'
 import { selectIsLoading } from '../../store/selectors/appSelector'
+import { setCurrentBoardId } from '../../store/reducers/boardsReducer'
 
 export const Board: FC = memo(() => {
   const { id } = useParams()
-  const [isPageLoading, setIsPageLoading] = useState(true)
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -38,21 +37,24 @@ export const Board: FC = memo(() => {
   )
 
   useEffect(() => {
-    setIsPageLoading(true)
+    if (id) {
+      dispatch(setCurrentBoardId(+id))
+    }
+  }, [id, dispatch])
+
+  useEffect(() => {
     if (currentBoard) {
       dispatch(fetchCards({ id: currentBoard.id }))
-      dispatch(setTheme({ background: currentBoard?.color }))
+      dispatch(setTheme({ background: currentBoard.color }))
     }
-    setIsPageLoading(false)
   }, [currentBoard, dispatch])
 
   useEffect(() => {
-    if (!isPageLoading && !currentBoard && !isDataLoading) {
+    if (!currentBoard && !isDataLoading) {
       navigate(RoutesPath.index)
+      dispatch(setCurrentBoardId(null))
     }
-  }, [isPageLoading, isDataLoading, currentBoard, navigate])
-
-  if (isPageLoading) return <Preloader />
+  }, [isDataLoading, currentBoard, navigate, dispatch])
 
   return (
     <BoardContainer>
@@ -61,13 +63,13 @@ export const Board: FC = memo(() => {
           <Card id={m.id} title={m.title} key={m.id} />
         ))}
       </CardsContainer>
-      <AddItemForm
+      <AddTasksAndCardsForm
         callBack={addCardHandler}
         label={LabelMessage.EnterListTitle}
-        btnText={cards.length < 1 ? 'Add a list' : 'Add another list'}
+        btnText={!cards.length ? LabelMessage.AddList : LabelMessage.AddAnotherList}
         submitBtnText={LabelMessage.AddList}
         component={'input'}
-        list={true}
+        isForAddingCard
         id={+id!}
       />
     </BoardContainer>
