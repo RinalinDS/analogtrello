@@ -15,11 +15,11 @@ type CardPropsType = {
 
 export const Card: FC<CardPropsType> = memo(({ id, title }) => {
   const dispatch = useAppDispatch()
-  const onDeleteButtonClick = useCallback(() => {
+  const deleteCardHandler = useCallback(() => {
     dispatch(deleteCard({ id }))
   }, [dispatch, id])
 
-  const changCardTitle = useCallback(
+  const changeCardTitleHandler = useCallback(
     (newTitle: string) => {
       dispatch(changeCardTitle({ title: newTitle, id }))
     },
@@ -28,7 +28,11 @@ export const Card: FC<CardPropsType> = memo(({ id, title }) => {
 
   return (
     <CardContent>
-      <CardTitle title={title} callback={onDeleteButtonClick} changeTitle={changCardTitle} />
+      <CardTitle
+        title={title}
+        deleteCard={deleteCardHandler}
+        changeTitle={changeCardTitleHandler}
+      />
       <Tasks cardId={id} />
     </CardContent>
   )

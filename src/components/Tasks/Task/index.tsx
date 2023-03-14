@@ -1,4 +1,4 @@
-import React, { FC, memo, MouseEvent, useCallback, useState } from 'react'
+import React, { FC, MouseEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
@@ -7,7 +7,6 @@ import { TaskType } from '../../../types/BoardsType'
 import { deleteTask } from '../../../store/reducers/tasksReducer'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { Modal } from '../../../common/Modal'
-import { SecondModal } from '../../../common/Modal/ModalSecond'
 
 type TaskPropsType = {
   task: TaskType
@@ -17,14 +16,13 @@ export const Task: FC<TaskPropsType> = ({ task }) => {
   const dispatch = useAppDispatch()
   const [isVisible, setIsVisible] = useState<boolean>(false)
 
-  const toggleModal = (e: MouseEvent) => {
-    e.stopPropagation()
-    setIsVisible(true)
-  }
-
   const { id, title, cardId } = task
 
-  const onDeleteButtonClick = useCallback(
+  const openModal = useCallback(() => {
+    setIsVisible(true)
+  }, [])
+
+  const deleteTaskHandler = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation()
       dispatch(deleteTask({ id, cardId }))
@@ -33,23 +31,25 @@ export const Task: FC<TaskPropsType> = ({ task }) => {
   )
 
   return (
-    <Item onClick={toggleModal}>
-      <TextTask>{title}</TextTask>
-      <StyledIconButton onClick={onDeleteButtonClick}>
-        <CloseSharpIcon />
-      </StyledIconButton>
-      <Modal setIsModalVisible={setIsVisible} visible={isVisible}>
+    <>
+      <TaskItem onClick={openModal}>
+        <TaskText>{title}</TaskText>
+        <StyledIconButton onClick={deleteTaskHandler}>
+          <CloseSharpIcon />
+        </StyledIconButton>
+      </TaskItem>
+      <Modal setIsVisible={setIsVisible} visible={isVisible}>
         <div>IT'S A DISASTAH</div>
       </Modal>
-    </Item>
+    </>
   )
 }
 
-export const TextTask = styled(Text)`
+export const TaskText = styled(Text)`
   padding-right: 5rem;
 `
 
-export const Item = styled.div`
+export const TaskItem = styled.div`
   background: white;
   word-wrap: break-word;
   color: #172b4d;

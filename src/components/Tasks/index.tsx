@@ -9,7 +9,7 @@ import { selectTasksByCardId } from '../../store/selectors/tasksSelector'
 import { addTask, fetchTasks } from '../../store/reducers/tasksReducer'
 import { LabelMessage } from '../../enums/Message'
 
-import { AddItemForm } from '../../common/AddItemForm'
+import { AddTasksAndCardsForm } from '../../common/AddForms/AddTasksAndCardsForm'
 
 import { Task } from './Task'
 
@@ -36,13 +36,12 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
           <Task task={m} key={m.id} />
         ))}
       </TasksContainer>
-      <AddItemForm
+      <AddTasksAndCardsForm
         callBack={addTaskHandler}
         label={LabelMessage.EnterTaskTitle}
         component={'textarea'}
         submitBtnText={LabelMessage.AddTask}
         btnText={LabelMessage.AddTask}
-        list={false}
       />
     </>
   )
