@@ -73,11 +73,11 @@ export const CancelButton = styled(Button)`
   }
 `
 
-export const AddItemContainer = styled.div<{ list?: boolean }>`
+export const AddItemContainer = styled.div<{ $isForAddingCard?: boolean }>`
   min-height: 3.2rem;
   cursor: pointer;
   padding: 0.8rem;
   border-radius: 3px;
-  width: ${props => (props.list ? '20rem' : '100%')};
-  background: ${props => (props.list ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
+  width: ${props => (props.$isForAddingCard ? '20rem' : '100%')};
+  background: ${props => (props.$isForAddingCard ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
 `
