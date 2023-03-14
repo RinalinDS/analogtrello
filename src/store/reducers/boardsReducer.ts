@@ -5,21 +5,21 @@ import { BoardType } from '../../types/BoardsType'
 export type BoardsReducerStateType = {
   boards: BoardType[]
   currentBoardId: number | null
-  newBoardCreated: boolean
+  isNewBoardCreated: boolean
 }
 
 const initialState: BoardsReducerStateType = {
   boards: [],
   currentBoardId: null,
-  newBoardCreated: false,
+  isNewBoardCreated: false,
 }
 
 const slice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
-    setCurrentBoardId: (state, action: PayloadAction<{ id: number }>) => {
-      state.currentBoardId = action.payload.id
+    setCurrentBoardId: (state, action: PayloadAction<number | null>) => {
+      state.currentBoardId = action.payload
     },
     fetchBoards: () => {},
     fetchBoardsFulfilled: (state, action: PayloadAction<BoardType[]>) => {
@@ -34,8 +34,8 @@ const slice = createSlice({
       const index = state.boards.findIndex(f => f.id === action.payload.id)
       state.boards.splice(index, 1)
     },
-    toggleFlagNewBoard: (state, action: PayloadAction<boolean>) => {
-      state.newBoardCreated = action.payload
+    toggleIsNewBoardCreated: (state, action: PayloadAction<boolean>) => {
+      state.isNewBoardCreated = action.payload
     },
   },
 })
@@ -50,5 +50,5 @@ export const {
   deleteBoardFulfilled,
   deleteBoard,
   setCurrentBoardId,
-  toggleFlagNewBoard,
+  toggleIsNewBoardCreated,
 } = slice.actions
