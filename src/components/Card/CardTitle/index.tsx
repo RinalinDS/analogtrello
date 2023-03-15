@@ -10,7 +10,7 @@ import React, {
 import styled from 'styled-components'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
-import { StyledIconButton, Text } from '../../../common/shared/style'
+import { StyledIconButton, StyledTextarea, Text } from '../../../common/shared/style'
 
 type PropsType = {
   title: string
@@ -93,19 +93,4 @@ const StyledTitle = styled.h3`
   justify-content: space-between;
   align-items: center;
   font-size: 1.6rem;
-`
-
-const StyledTextarea = styled.textarea`
-  width: 100%;
-  resize: none;
-  border-radius: 3px;
-  border: none;
-  display: block;
-  outline: none;
-  font-family: sans-serif;
-  font-size: inherit;
-  font-weight: inherit;
-  box-shadow: inset 0 0 0 2px #0079bf;
-  padding: 0.4rem 0.8rem;
-  min-height: 1rem;
 `
