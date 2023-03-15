@@ -14,7 +14,10 @@ export type TaskType = {
   id: number
   title: string
   cardId: number
+  description: string
 }
+export type ChangeDescriptionPayloadType = Pick<TaskType, 'cardId' | 'description' | 'id'>
+export type ChangeTaskTitlePayloadType = Pick<TaskType, 'cardId' | 'title' | 'id'>
 
 export type DeleteTaskPayloadType = {
   cardId: number

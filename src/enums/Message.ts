@@ -6,6 +6,8 @@ export enum SuccessMessage {
   deleteCard = 'Card deleted successfully',
   deleteTask = 'Task deleted successfully',
   changeCardTitle = 'Card title changed successfully',
+  changeTaskTitle = 'Task title changed successfully',
+  changeTaskDescription = 'Task description changed successfully',
 }
 
 export enum ErrorMessage {

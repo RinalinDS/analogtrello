@@ -3,11 +3,21 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosError, AxiosResponse } from 'axios'
 import { call, put, takeEvery } from 'redux-saga/effects'
 
-import { CardType, DeleteTaskPayloadType, TaskType } from '../../types/BoardsType'
+import {
+  CardType,
+  ChangeDescriptionPayloadType,
+  ChangeTaskTitlePayloadType,
+  DeleteTaskPayloadType,
+  TaskType,
+} from '../../types/BoardsType'
 import { Service } from '../../api/Service'
 import {
   addTask,
   addTaskFulfilled,
+  changeTaskDescription,
+  changeTaskDescriptionFulfilled,
+  changeTaskTitle,
+  changeTaskTitleFulfilled,
   deleteTask,
   deleteTaskFulfilled,
   fetchTasks,
@@ -61,8 +71,38 @@ export function* deleteTaskWorker(action: PayloadAction<DeleteTaskPayloadType>) 
   }
 }
 
+export function* changeTaskTitleWorker(action: PayloadAction<ChangeTaskTitlePayloadType>) {
+  try {
+    yield put(requestInitiated())
+    const res: AxiosResponse<TaskType> = yield call(Service.changeTaskTitle, action.payload)
+    yield put(changeTaskTitleFulfilled(res.data))
+    yield put(addSuccessMsg(SuccessMessage.changeTaskTitle))
+  } catch (e) {
+    const error = e as AxiosError<{ message: string }>
+    yield put(addErrorMsg(error?.response?.data?.message || ErrorMessage.Some))
+  } finally {
+    yield put(requestFinally())
+  }
+}
+
+export function* changeTaskDescriptionWorker(action: PayloadAction<ChangeDescriptionPayloadType>) {
+  try {
+    yield put(requestInitiated())
+    const res: AxiosResponse<TaskType> = yield call(Service.changeTaskDescription, action.payload)
+    yield put(changeTaskDescriptionFulfilled(res.data))
+    yield put(addSuccessMsg(SuccessMessage.changeTaskDescription))
+  } catch (e) {
+    const error = e as AxiosError<{ message: string }>
+    yield put(addErrorMsg(error?.response?.data?.message || ErrorMessage.Some))
+  } finally {
+    yield put(requestFinally())
+  }
+}
+
 export function* TasksWatcher() {
   yield takeEvery(fetchTasks.type, getTasksWorker)
   yield takeEvery(addTask.type, addTaskWorker)
   yield takeEvery(deleteTask.type, deleteTaskWorker)
+  yield takeEvery(changeTaskTitle.type, changeTaskTitleWorker)
+  yield takeEvery(changeTaskDescription.type, changeTaskDescriptionWorker)
 }

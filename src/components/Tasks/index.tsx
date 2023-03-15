@@ -26,7 +26,7 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
   const addTaskHandler = useCallback(
     (title: string) => {
       const taskId = +new Date()
-      dispatch(addTask({ id: taskId, title, cardId: cardId }))
+      dispatch(addTask({ id: taskId, title, cardId: cardId, description: '' }))
     },
     [cardId, dispatch],
   )

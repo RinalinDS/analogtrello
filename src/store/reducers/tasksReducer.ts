@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { DeleteTaskPayloadType, TaskType } from '../../types/BoardsType'
+import {
+  ChangeDescriptionPayloadType,
+  ChangeTaskTitlePayloadType,
+  DeleteTaskPayloadType,
+  TaskType,
+} from '../../types/BoardsType'
 
 import { deleteCardFulfilled } from './cardsReducer'
 
@@ -30,6 +35,20 @@ const slice = createSlice({
       const index = state.tasks[action.payload.cardId].findIndex(f => f.id === action.payload.id)
       state.tasks[action.payload.cardId].splice(index, 1)
     },
+    changeTaskTitle: (_state, _action: PayloadAction<ChangeTaskTitlePayloadType>) => {},
+    changeTaskTitleFulfilled: (state, action: PayloadAction<TaskType>) => {
+      if (action.payload.cardId && action.payload.title) {
+        const index = state.tasks[action.payload.cardId].findIndex(f => f.id === action.payload.id)
+        state.tasks[action.payload.cardId][index] = action.payload
+      }
+    },
+    changeTaskDescription: (_state, _action: PayloadAction<ChangeDescriptionPayloadType>) => {},
+    changeTaskDescriptionFulfilled: (state, action: PayloadAction<TaskType>) => {
+      if (action.payload.cardId && action.payload.description) {
+        const index = state.tasks[action.payload.cardId].findIndex(f => f.id === action.payload.id)
+        state.tasks[action.payload.cardId][index] = action.payload
+      }
+    },
   },
   extraReducers: builder => {
     builder.addCase(deleteCardFulfilled, (state, action) => {
@@ -47,4 +66,8 @@ export const {
   addTaskFulfilled,
   deleteTaskFulfilled,
   deleteTask,
+  changeTaskTitle,
+  changeTaskTitleFulfilled,
+  changeTaskDescriptionFulfilled,
+  changeTaskDescription,
 } = slice.actions

@@ -1,18 +1,23 @@
-import React, { FC, MouseEvent, useCallback, useState } from 'react'
+import React, { FC, memo, MouseEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
 import { StyledIconButton, Text } from '../../../common/shared/style'
 import { TaskType } from '../../../types/BoardsType'
-import { deleteTask } from '../../../store/reducers/tasksReducer'
+import {
+  changeTaskDescription,
+  changeTaskTitle,
+  deleteTask,
+} from '../../../store/reducers/tasksReducer'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { Modal } from '../../../common/Modal'
+import { DetailedTask } from '../DetailedTask'
 
 type TaskPropsType = {
   task: TaskType
 }
 
-export const Task: FC<TaskPropsType> = ({ task }) => {
+export const Task: FC<TaskPropsType> = memo(({ task }) => {
   const dispatch = useAppDispatch()
   const [isVisible, setIsVisible] = useState<boolean>(false)
 
@@ -30,6 +35,20 @@ export const Task: FC<TaskPropsType> = ({ task }) => {
     [cardId, dispatch, id],
   )
 
+  const changeTaskTitleHandler = useCallback(
+    (newTitle: string) => {
+      dispatch(changeTaskTitle({ title: newTitle, id, cardId }))
+    },
+    [dispatch, id, cardId],
+  )
+
+  const changeTaskDescriptionHandler = useCallback(
+    (newDescription: string) => {
+      dispatch(changeTaskDescription({ description: newDescription, id, cardId }))
+    },
+    [dispatch, id, cardId],
+  )
+
   return (
     <>
       <TaskItem onClick={openModal}>
@@ -39,11 +58,15 @@ export const Task: FC<TaskPropsType> = ({ task }) => {
         </StyledIconButton>
       </TaskItem>
       <Modal setIsVisible={setIsVisible} visible={isVisible}>
-        <div>IT'S A DISASTAH</div>
+        <DetailedTask
+          task={task}
+          changeTitle={changeTaskTitleHandler}
+          changeDescription={changeTaskDescriptionHandler}
+        />
       </Modal>
     </>
   )
-}
+})
 
 export const TaskText = styled(Text)`
   padding-right: 5rem;

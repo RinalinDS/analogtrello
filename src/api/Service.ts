@@ -2,7 +2,13 @@ import axios, { AxiosResponse } from 'axios'
 
 import { ServicePath } from '../enums/ServicePath'
 
-import { BoardType, CardType, TaskType } from '../types/BoardsType'
+import {
+  BoardType,
+  CardType,
+  ChangeDescriptionPayloadType,
+  ChangeTaskTitlePayloadType,
+  TaskType,
+} from '../types/BoardsType'
 
 const baseURL = 'http://localhost:4000'
 
@@ -50,5 +56,15 @@ export class Service {
 
   static async changeCardTitle(id: number, title: string): Promise<AxiosResponse<CardType>> {
     return instance.patch(`${ServicePath.cards}/${id}`, { title })
+  }
+
+  static async changeTaskTitle(task: ChangeTaskTitlePayloadType): Promise<AxiosResponse<TaskType>> {
+    return instance.patch(`${ServicePath.tasks}/${task.id}`, { title: task.title })
+  }
+
+  static async changeTaskDescription(
+    task: ChangeDescriptionPayloadType,
+  ): Promise<AxiosResponse<TaskType>> {
+    return instance.patch(`${ServicePath.tasks}/${task.id}`, { description: task.description })
   }
 }
