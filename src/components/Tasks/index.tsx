@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect } from 'react'
+import React, { FC, memo, useCallback, useEffect, useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -11,11 +11,17 @@ import { LabelMessage } from '../../enums/Message'
 
 import { AddTasksAndCardsForm } from '../../common/AddForms/AddTasksAndCardsForm'
 
+import { AddItemContainer, Text } from '../../common/shared/style'
+
 import { Task } from './Task'
 
 export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
   const dispatch = useAppDispatch()
   const tasks = useAppSelector<TaskType[]>(state => selectTasksByCardId(state, cardId))
+  const [isFormOpened, setIsFormOpened] = useState<boolean>(false)
+
+  const closeForm = useCallback(() => setIsFormOpened(false), [])
+  const openForm = useCallback(() => setIsFormOpened(true), [])
 
   const addTaskHandler = useCallback(
     (title: string) => {
@@ -36,13 +42,19 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
           <Task task={m} key={m.id} />
         ))}
       </TasksContainer>
-      <AddTasksAndCardsForm
-        callBack={addTaskHandler}
-        label={LabelMessage.EnterTaskTitle}
-        component={'textarea'}
-        submitBtnText={LabelMessage.AddTask}
-        btnText={LabelMessage.AddTask}
-      />
+      {isFormOpened ? (
+        <AddTasksAndCardsForm
+          callBack={addTaskHandler}
+          label={LabelMessage.EnterTaskTitle}
+          component={'textarea'}
+          submitBtnText={LabelMessage.AddTask}
+          closeForm={closeForm}
+        />
+      ) : (
+        <AddItemContainer onClick={openForm}>
+          <Text>&#43; {LabelMessage.AddTask}</Text>
+        </AddItemContainer>
+      )}
     </>
   )
 })

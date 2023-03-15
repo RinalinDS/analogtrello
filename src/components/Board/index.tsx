@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect } from 'react'
+import React, { FC, memo, useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
@@ -16,10 +16,11 @@ import { LabelMessage } from '../../enums/Message'
 import { RoutesPath } from '../../enums/RoutesPath'
 import { selectIsLoading } from '../../store/selectors/appSelector'
 import { setCurrentBoardId } from '../../store/reducers/boardsReducer'
+import { AddItemContainer, Text } from '../../common/shared/style'
 
 export const Board: FC = memo(() => {
   const { id } = useParams()
-
+  const [isFormOpened, setIsFormOpened] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -27,6 +28,9 @@ export const Board: FC = memo(() => {
   const currentBoard = useAppSelector<BoardType | null>(state => selectCurrentBoard(state, id))
 
   const isDataLoading = useAppSelector(selectIsLoading)
+
+  const closeForm = useCallback(() => setIsFormOpened(false), [])
+  const openForm = useCallback(() => setIsFormOpened(true), [])
 
   const addCardHandler = useCallback(
     (title: string) => {
@@ -39,6 +43,7 @@ export const Board: FC = memo(() => {
   useEffect(() => {
     if (id) {
       dispatch(setCurrentBoardId(+id))
+      setIsFormOpened(false)
     }
   }, [id, dispatch])
 
@@ -63,15 +68,22 @@ export const Board: FC = memo(() => {
           <Card id={m.id} title={m.title} key={m.id} />
         ))}
       </CardsContainer>
-      <AddTasksAndCardsForm
-        callBack={addCardHandler}
-        label={LabelMessage.EnterListTitle}
-        btnText={!cards.length ? LabelMessage.AddList : LabelMessage.AddAnotherList}
-        submitBtnText={LabelMessage.AddList}
-        component={'input'}
-        isForAddingCard
-        id={+id!}
-      />
+      {isFormOpened ? (
+        <AddTasksAndCardsForm
+          callBack={addCardHandler}
+          label={LabelMessage.EnterListTitle}
+          submitBtnText={LabelMessage.AddList}
+          component={'input'}
+          isForAddingCard
+          closeForm={closeForm}
+        />
+      ) : (
+        <AddItemContainer onClick={openForm} $isForAddingCard>
+          <Text whiteText>
+            &#43; {!cards.length ? LabelMessage.AddList : LabelMessage.AddAnotherList}
+          </Text>
+        </AddItemContainer>
+      )}
     </BoardContainer>
   )
 })

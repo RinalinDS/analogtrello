@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import React, { FC, memo } from 'react'
 import * as Yup from 'yup'
 
 import { Form, Formik } from 'formik'
@@ -6,23 +6,15 @@ import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 
 import styled from 'styled-components'
 
-import {
-  AddItemContainer,
-  ButtonContainer,
-  CancelButton,
-  StyledField,
-  SubmitButton,
-  Text,
-} from '../../shared/style'
+import { ButtonContainer, CancelButton, StyledField, SubmitButton } from '../../shared/style'
 
 type AddTasksAndCardsFormPropsType = {
   callBack: (title: string) => void
   label: string
   submitBtnText: string
-  btnText: string
   component: string
   isForAddingCard?: boolean
-  id?: number
+  closeForm: () => void
 }
 
 const schema = Yup.object().shape({
@@ -30,16 +22,8 @@ const schema = Yup.object().shape({
 })
 
 export const AddTasksAndCardsForm: FC<AddTasksAndCardsFormPropsType> = memo(
-  ({ callBack, label, component, submitBtnText, isForAddingCard, btnText, id }) => {
-    const [edit, setEdit] = useState<boolean>(false)
-    const closeForm = useCallback(() => setEdit(false), [])
-    const openForm = useCallback(() => setEdit(true), [])
-
-    useEffect(() => {
-      setEdit(false)
-    }, [id])
-
-    return edit ? (
+  ({ callBack, label, component, submitBtnText, isForAddingCard, closeForm }) => {
+    return (
       <Formik
         initialValues={{
           title: '',
@@ -58,6 +42,7 @@ export const AddTasksAndCardsForm: FC<AddTasksAndCardsFormPropsType> = memo(
               placeholder={label}
               component={component}
               autoComplete={'off'}
+              autofocus
             />
             <ButtonContainer>
               <SubmitButton disabled={!values.title || !!errors.title} type={'submit'}>
@@ -70,10 +55,6 @@ export const AddTasksAndCardsForm: FC<AddTasksAndCardsFormPropsType> = memo(
           </StyledForm>
         )}
       </Formik>
-    ) : (
-      <AddItemContainer onClick={openForm} $isForAddingCard={isForAddingCard}>
-        <Text whiteText={isForAddingCard}>&#43; {btnText}</Text>
-      </AddItemContainer>
     )
   },
 )
