@@ -1,6 +1,7 @@
 export type BoardType = {
   id: number
   title: string
+  color: string
 }
 
 export type CardType = {
@@ -13,4 +14,14 @@ export type TaskType = {
   id: number
   title: string
   cardId: number
+}
+
+export type DeleteTaskPayloadType = {
+  cardId: number
+  id: number
+}
+
+export type ChangeCardTitlePayloadType = {
+  title: string
+  id: number
 }

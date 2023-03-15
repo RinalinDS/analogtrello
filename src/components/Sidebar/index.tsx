@@ -1,66 +1,105 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-import IconButton from '@mui/material/IconButton'
-
-import AddIcon from '@mui/icons-material/Add'
-
-import { Link } from 'react-router-dom'
-
-import { Modal } from '../../common/Modal'
+import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 
-import { AddItemForm } from '../../common/AddItemForm'
-
 import { BoardType } from '../../types/BoardsType'
-import { addBoard, fetchBoards } from '../../store/reducers/boardsReducer'
+import {
+  addBoard,
+  deleteBoard,
+  fetchBoards,
+  setCurrentBoardId,
+  toggleIsNewBoardCreated,
+} from '../../store/reducers/boardsReducer'
 
-import { selectBoards } from '../../store/selectors/boardsSelector'
-import { LabelMessage } from '../../enums/Message'
+import {
+  selectBoards,
+  selectCurrentBoardId,
+  selectIsNewBoardCreated,
+} from '../../store/selectors/boardsSelector'
+import { RoutesPath } from '../../enums/RoutesPath'
+
+import { BasicMenu } from '../../common/Menu'
+
+import { Text } from '../../common/shared/style'
+
+import { clearTheme } from '../../store/reducers/appReducer'
+
 import { ServicePath } from '../../enums/ServicePath'
 
+import { LabelMessage } from '../../enums/Message'
+import { AddBoardForm } from '../../common/AddForms/AddBoardForm'
+
+import { BoardLink } from './BoardLink'
+
 export const Sidebar = memo(() => {
-  const [isModalActive, setIsModalActive] = useState(false)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
+  const currentBoardId = useAppSelector<number | null>(selectCurrentBoardId)
+  const isNewBoardCreated = useAppSelector<boolean>(selectIsNewBoardCreated)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
+  const lastBoardId = boards.at(-1)?.id
+  const newBoardUrl = `${ServicePath.boards}/${lastBoardId}`
 
   const addBoardHandler = useCallback(
-    (title: string) => {
+    (title: string, color: string) => {
       const id = +new Date()
-      dispatch(addBoard({ id, title }))
-      setIsModalActive(false)
+      dispatch(addBoard({ id, title, color }))
+      setAnchorEl(null)
     },
     [dispatch],
   )
 
-  const activateModal = useCallback(() => setIsModalActive(true), [])
+  const deleteBoardHandler = useCallback(
+    (id: number) => {
+      dispatch(deleteBoard({ id }))
+      if (id === currentBoardId) {
+        navigate(RoutesPath.index)
+        dispatch(clearTheme())
+        dispatch(setCurrentBoardId(null))
+      }
+    },
+    [navigate, dispatch, currentBoardId],
+  )
 
   useEffect(() => {
     dispatch(fetchBoards())
   }, [dispatch])
 
+  useEffect(() => {
+    if (isNewBoardCreated && boards.length) {
+      dispatch(setCurrentBoardId(lastBoardId!))
+      navigate(newBoardUrl)
+      dispatch(toggleIsNewBoardCreated(false))
+    }
+  }, [isNewBoardCreated, boards, dispatch, navigate, lastBoardId, newBoardUrl])
+
   return (
     <SidebarContainer>
       <AddBoardContainer>
-        <StyledSpan>Your boards</StyledSpan>
-        <StyledIconButton onClick={activateModal}>
-          <AddIcon />
-        </StyledIconButton>
+        <Text>Your boards</Text>
+        <BasicMenu iconType={'plus'} anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
+          <AddBoardForm callBack={addBoardHandler} label={LabelMessage.BoardTitle} />
+        </BasicMenu>
       </AddBoardContainer>
       <List>
         {boards.map((m, _i) => {
           return (
-            <Item key={m.id}>
-              <Link to={`${ServicePath.boards}/${m.id}`}>{m.title}</Link>
-            </Item>
+            <BoardLink
+              active={currentBoardId === m.id}
+              key={m.id}
+              title={m.title}
+              id={m.id}
+              onDeleteButtonClick={deleteBoardHandler}
+            />
           )
         })}
       </List>
-      <Modal setIsModalVisible={setIsModalActive} visible={isModalActive}>
-        <AddItemForm callBack={addBoardHandler} label={LabelMessage.BoardTitle} />
-      </Modal>
     </SidebarContainer>
   )
 })
@@ -68,7 +107,7 @@ export const Sidebar = memo(() => {
 export const SidebarContainer = styled.div`
   grid-row-start: span 2;
   width: 26rem;
-  background: green;
+  background: ${props => props.theme.background || 'green'};
   height: 100%;
   border-right: 1px solid white;
   padding: 1.2rem 2.4rem;
@@ -79,39 +118,22 @@ export const AddBoardContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-
-export const StyledSpan = styled.span``
-
-export const StyledIconButton = styled(IconButton)`
-  & > svg {
-    font-size: 2.4rem;
-  }
-`
-
 export const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 
-  & div:hover {
-    background: lightblue;
-  }
-
   & a:link,
   a:visited {
-    color: #1098ad;
+    color: #fff;
     text-decoration: none;
+    width: 70%;
+    padding: 0.6rem;
   }
 
   & a:hover {
-    color: gray;
-    font-weight: bold;
   }
 
   & a:active {
-    background-color: black;
-    font-style: italic;
   }
 `
-
-export const Item = styled.div``

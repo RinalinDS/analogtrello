@@ -2,6 +2,10 @@ export enum SuccessMessage {
   Board = 'Board added successfully',
   Card = 'Card added successfully',
   Task = 'Task added successfully',
+  deleteBoard = 'Board deleted successfully',
+  deleteCard = 'Card deleted successfully',
+  deleteTask = 'Task deleted successfully',
+  changeCardTitle = 'Card title changed successfully',
 }
 
 export enum ErrorMessage {
@@ -9,7 +13,11 @@ export enum ErrorMessage {
 }
 
 export enum LabelMessage {
-  AddTask = 'Add task',
+  EnterTaskTitle = 'Enter task title',
+  AddTask = 'Add Task',
+  AddList = 'Add List',
+  AddAnotherList = 'Add another list',
   EnterListTitle = 'Enter list title',
   BoardTitle = 'Board title',
+  DeleteBoard = 'Delete board',
 }
