@@ -61,7 +61,6 @@ export const ModalContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background: #ffffff;
-  padding: 4rem;
   z-index: 1001;
   color: #333333;
 `
