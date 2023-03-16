@@ -37,14 +37,14 @@ const slice = createSlice({
     },
     changeTaskTitle: (_state, _action: PayloadAction<ChangeTaskTitlePayloadType>) => {},
     changeTaskTitleFulfilled: (state, action: PayloadAction<TaskType>) => {
-      if (action.payload.cardId && action.payload.title) {
+      if (action.payload.cardId) {
         const index = state.tasks[action.payload.cardId].findIndex(f => f.id === action.payload.id)
         state.tasks[action.payload.cardId][index] = action.payload
       }
     },
     changeTaskDescription: (_state, _action: PayloadAction<ChangeDescriptionPayloadType>) => {},
     changeTaskDescriptionFulfilled: (state, action: PayloadAction<TaskType>) => {
-      if (action.payload.cardId && action.payload.description) {
+      if (action.payload.cardId) {
         const index = state.tasks[action.payload.cardId].findIndex(f => f.id === action.payload.id)
         state.tasks[action.payload.cardId][index] = action.payload
       }
