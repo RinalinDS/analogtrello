@@ -1,48 +1,55 @@
-import React, { ChangeEvent, FC, KeyboardEvent, memo, useCallback, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FC,
+  KeyboardEvent,
+  memo,
+  MouseEvent,
+  useCallback,
+  useState,
+} from 'react'
 
 import styled from 'styled-components'
 
-import { TaskType } from '../../../types/BoardsType'
 import {
   ButtonContainer,
   CancelButton,
   ConfirmButton,
+  StyledEditableText,
+  StyledInput,
+  StyledText,
   StyledTextarea,
   SubmitButton,
 } from '../../../common/shared/style'
 
 type DetailedTaskProps = {
-  task: TaskType
   changeTitle: (title: string) => void
   changeDescription: (description: string) => void
+  cardTitle: string
+  title: string
+  description: string
 }
 
 export const DetailedTask: FC<DetailedTaskProps> = memo(
-  ({ task, changeTitle, changeDescription }) => {
-    const { title, description } = task
-
+  ({ changeTitle, changeDescription, cardTitle, description, title }) => {
     const [editTitle, setEditTitle] = useState<boolean>(false)
     const [editDescription, setEditDescription] = useState<boolean>(false)
     const [newTitle, setTitle] = useState<string>(title)
     const [newDescription, setDescription] = useState<string>(description)
 
     const changeTitleHandler = useCallback(() => {
-      if (newTitle !== title) {
-        const trimmedNewTitle = newTitle.trim()
+      const trimmedNewTitle = newTitle.trim()
+      if (trimmedNewTitle !== title) {
         trimmedNewTitle && changeTitle(trimmedNewTitle)
       }
-      if (!newTitle.trim()) {
+      if (!trimmedNewTitle) {
         setTitle(title)
       }
     }, [newTitle, changeTitle, title])
 
     const changeDescriptionHandler = useCallback(() => {
-      if (newDescription !== description) {
-        const trimmedNewDescription = newDescription.trim()
-        trimmedNewDescription && changeDescription(trimmedNewDescription)
-      }
-      if (!newDescription.trim()) {
-        setDescription(description)
+      const trimmedNewDescription = newDescription.trim()
+      if (trimmedNewDescription !== description) {
+        changeDescription(trimmedNewDescription)
       }
     }, [newDescription, changeDescription, description])
 
@@ -54,55 +61,71 @@ export const DetailedTask: FC<DetailedTaskProps> = memo(
       setDescription(e.currentTarget.value)
     }, [])
 
-    const openEdit = useCallback(() => setEditTitle(true), [])
-    const closeEdit = useCallback(() => setEditTitle(false), [])
+    const openTitleEdit = useCallback(() => setEditTitle(true), [])
+    const closeTitleEdit = useCallback(() => setEditTitle(false), [])
 
     const openEditDescription = useCallback(() => setEditDescription(true), [])
     const closeEditDescription = useCallback(() => setEditDescription(false), [])
 
-    const onBlurHandler = useCallback(() => {
-      closeEdit()
-      changeTitleHandler()
-    }, [changeTitleHandler, closeEdit])
-
-    const onTextAreaBlurHandler = useCallback(() => {
+    const cancelDescriptionHandler = useCallback(() => {
       closeEditDescription()
-      changeDescriptionHandler()
-    }, [changeDescriptionHandler, closeEditDescription])
+      setDescription(description)
+    }, [closeEditDescription, setDescription, description])
 
-    const escapeAndEnterHandler = useCallback(
-      (e: KeyboardEvent<HTMLInputElement>) => {
-        e.stopPropagation()
-        if (e.key === 'Escape') {
-          closeEdit()
-          setTitle(title)
-        }
-        if (e.key === 'Enter') {
-          closeEdit()
+    const onBlurHandler = useCallback(
+      (e: React.FocusEvent<HTMLInputElement> | React.FocusEvent<HTMLTextAreaElement>) => {
+        if (e.target.localName === 'input') {
+          closeTitleEdit()
           changeTitleHandler()
         }
-      },
-      [changeTitleHandler, closeEdit, title],
-    )
-
-    const textAreaEscapeAndEnterHandler = useCallback(
-      (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        e.stopPropagation()
-
-        if (e.key === 'Escape') {
-          closeEditDescription()
-          setDescription(description)
-        }
-        if (e.key === 'Enter') {
+        if (e.target.localName === 'textarea') {
           closeEditDescription()
           changeDescriptionHandler()
         }
       },
-      [changeDescriptionHandler, closeEditDescription, description],
+      [changeTitleHandler, closeTitleEdit, closeEditDescription, changeDescriptionHandler],
     )
+
+    const escapeAndEnterHandler = useCallback(
+      (e: KeyboardEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        if (e.key === 'Escape') {
+          if (e.currentTarget.localName === 'textarea') {
+            cancelDescriptionHandler()
+          }
+          if (e.currentTarget.localName === 'input') {
+            closeTitleEdit()
+            setTitle(title)
+          }
+        }
+        if (e.key === 'Enter') {
+          if (e.currentTarget.localName === 'textarea') {
+            closeEditDescription()
+            changeDescriptionHandler()
+          }
+          if (e.currentTarget.localName === 'input') {
+            closeTitleEdit()
+            changeTitleHandler()
+          }
+        }
+      },
+      [
+        changeDescriptionHandler,
+        closeEditDescription,
+        closeTitleEdit,
+        cancelDescriptionHandler,
+        changeTitleHandler,
+        title,
+      ],
+    )
+
+    const preventDefaultHandler = useCallback((e: MouseEvent) => {
+      e.preventDefault()
+    }, [])
+
     return (
-      <StyledContainer>
-        <StyledTitleContainer>
+      <DetailedTaskContainer>
+        <TitleContainer>
           {editTitle ? (
             <StyledInput
               value={newTitle}
@@ -113,41 +136,77 @@ export const DetailedTask: FC<DetailedTaskProps> = memo(
               onKeyDown={escapeAndEnterHandler}
             />
           ) : (
-            <StyledTitle onClick={openEdit}>{title}</StyledTitle>
+            <StyledEditableText onClick={openTitleEdit}>{title}</StyledEditableText>
           )}
-        </StyledTitleContainer>
-        <header>тут будет кард тайтл</header>
-        <Flex>
-          <span>Description</span>
+          <GreySmallText>
+            in list <UnderlinedText>{cardTitle}</UnderlinedText>
+          </GreySmallText>
+        </TitleContainer>
+        <FlexContainer>
+          <StyledText>Description</StyledText>
           {description && !editDescription && (
             <ConfirmButton onClick={openEditDescription}>Edit</ConfirmButton>
           )}
-        </Flex>
+        </FlexContainer>
         {!description && !editDescription && (
           <BlankSpace onClick={openEditDescription}>Add More detailed description...</BlankSpace>
         )}
-        {editDescription ? (
-          <>
-            <StyledTextarea
-              value={newDescription}
-              onChange={onTextAreaChange}
-              spellCheck={false}
-              onBlur={onTextAreaBlurHandler}
-              autoFocus
-              onKeyDown={textAreaEscapeAndEnterHandler}
-            />
-            <ButtonContainer>
-              <SubmitButton onClick={changeDescriptionHandler}>Save</SubmitButton>
-              <CancelButton onClick={closeEditDescription}>Cancel</CancelButton>
-            </ButtonContainer>
-          </>
-        ) : (
-          <StyledTitle onClick={openEditDescription}>{description}</StyledTitle>
-        )}
-      </StyledContainer>
+        <DescriptionContainer>
+          {editDescription ? (
+            <>
+              <StyledTextarea
+                value={newDescription}
+                onChange={onTextAreaChange}
+                spellCheck={false}
+                onBlur={onBlurHandler}
+                autoFocus
+                onKeyDown={escapeAndEnterHandler}
+              />
+              <ButtonContainer>
+                <SubmitButton onClick={changeDescriptionHandler}>Save</SubmitButton>
+                <CancelButton
+                  onClick={cancelDescriptionHandler}
+                  onMouseDown={preventDefaultHandler}
+                >
+                  Cancel
+                </CancelButton>
+              </ButtonContainer>
+            </>
+          ) : (
+            <StyledEditableText $isForDescription onClick={openEditDescription}>
+              {description}
+            </StyledEditableText>
+          )}
+        </DescriptionContainer>
+      </DetailedTaskContainer>
     )
   },
 )
+
+const DetailedTaskContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 1.6rem 3.2rem 1.6rem 1.6rem;
+  width: 60rem;
+  min-height: 40rem;
+`
+
+const TitleContainer = styled.div`
+  font-size: 1.8rem;
+  font-weight: 600;
+`
+
+const DescriptionContainer = styled.div`
+  font-size: 1.4rem;
+  font-weight: 400;
+`
+const FlexContainer = styled.div`
+  display: flex;
+  gap: 2.4rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+`
 
 const BlankSpace = styled.p`
   background-color: #091e420a;
@@ -158,49 +217,20 @@ const BlankSpace = styled.p`
   min-height: 6rem;
   padding: 0.8rem 1.2rem;
   font-size: 1.2rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eee;
+  }
 `
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-  padding: 3.6rem 7.2rem;
-  width: 60rem;
-  height: 60%;
+const GreySmallText = styled.span`
+  display: inline-block;
+  font-size: 1.2rem;
+  color: #888;
+  padding: 0 0.4rem;
 `
 
-const Flex = styled.div`
-  display: flex;
-  gap: 2.4rem;
-  align-items: center;
-  justify-content: flex-start;
-`
-
-const StyledTitleContainer = styled.div`
-  margin-bottom: 1rem;
-`
-
-const StyledTitle = styled.span`
-  display: block;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.8rem;
-  margin: 0;
-  padding: 0.6rem 0.4rem;
-  font-weight: 600;
-`
-
-const StyledInput = styled.input`
-  box-sizing: border-box;
-  resize: none;
-  border-radius: 3px;
-  border: none;
-  display: block;
-  outline: none;
-  font-family: sans-serif;
-  box-shadow: inset 0 0 0 2px #0079bf;
-  padding: 0.6rem 0.4rem;
-  font-weight: 600;
-  font-size: 1.8rem;
-  width: 100%;
+const UnderlinedText = styled.span`
+  text-decoration: underline;
 `
