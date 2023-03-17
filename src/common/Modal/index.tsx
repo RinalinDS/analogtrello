@@ -63,6 +63,7 @@ export const ModalContainer = styled.div`
   background: #ffffff;
   z-index: 1001;
   color: #333333;
+  border-radius: 11px;
 `
 
 export const ModalCloseButton = styled.button`
