@@ -15,13 +15,14 @@ import { DetailedTask } from '../DetailedTask'
 
 type TaskPropsType = {
   task: TaskType
+  cardTitle: string
 }
 
-export const Task: FC<TaskPropsType> = memo(({ task }) => {
+export const Task: FC<TaskPropsType> = memo(({ task, cardTitle }) => {
   const dispatch = useAppDispatch()
   const [isVisible, setIsVisible] = useState<boolean>(false)
 
-  const { id, title, cardId } = task
+  const { id, title, cardId, description } = task
 
   const openModal = useCallback(() => {
     setIsVisible(true)
@@ -59,9 +60,11 @@ export const Task: FC<TaskPropsType> = memo(({ task }) => {
       </TaskItem>
       <Modal setIsVisible={setIsVisible} visible={isVisible}>
         <DetailedTask
-          task={task}
+          title={title}
+          description={description}
           changeTitle={changeTaskTitleHandler}
           changeDescription={changeTaskDescriptionHandler}
+          cardTitle={cardTitle}
         />
       </Modal>
     </>
