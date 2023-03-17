@@ -13,11 +13,6 @@ export const ButtonContainer = styled.div`
   gap: 0.4rem;
 `
 
-export const Text = styled.span<{ whiteText?: boolean }>`
-  color: ${props => (props.whiteText ? '#fff' : 'inherit')};
-  word-break: break-word;
-`
-
 export const ConfirmButton = styled.button`
   border: none;
   background: #eee;
@@ -65,10 +60,17 @@ export const SubmitButton = styled(Button)`
 
 export const CancelButton = styled(Button)`
   background: none;
+  padding: 0.3rem;
 
   & > svg {
     font-size: 2.8rem;
     color: #333;
+  }
+
+  &:hover {
+    background-color: #091e4214;
+    border: none;
+    box-shadow: none;
   }
 `
 
@@ -80,9 +82,10 @@ export const AddItemContainer = styled.div<{ $isForAddingCard?: boolean }>`
   width: ${props => (props.$isForAddingCard ? '20rem' : '100%')};
   background: ${props => (props.$isForAddingCard ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
 `
+
 export const StyledTextarea = styled.textarea`
   width: 100%;
-  resize: none;
+  resize: vertical;
   border-radius: 3px;
   border: none;
   display: block;
@@ -93,4 +96,40 @@ export const StyledTextarea = styled.textarea`
   box-shadow: inset 0 0 0 2px #0079bf;
   padding: 0.4rem 0.8rem;
   min-height: 1rem;
+  max-height: 40rem;
+  height: auto;
+`
+
+export const StyledInput = styled.input`
+  box-sizing: border-box;
+  resize: none;
+  border-radius: 3px;
+  border: none;
+  display: block;
+  outline: none;
+  font-family: sans-serif;
+  box-shadow: inset 0 0 0 2px #0079bf;
+  padding: 0.6rem 0.4rem;
+  font-weight: 600;
+  font-size: 1.8rem;
+  width: 100%;
+`
+
+export const Text = styled.span<{ whiteText?: boolean }>`
+  color: ${props => (props.whiteText ? '#fff' : 'inherit')};
+  word-break: break-word;
+`
+
+export const StyledText = styled(Text)`
+  display: block;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  padding: 0.6rem 0.4rem;
+`
+
+export const StyledEditableText = styled(StyledText)<{ $isForDescription?: boolean }>`
+  padding: ${props => (props.$isForDescription ? '0.4rem 0.8rem' : '0.6rem 0.4rem')};
+  cursor: pointer;
+  width: 100%;
 `
