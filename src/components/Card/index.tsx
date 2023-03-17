@@ -33,7 +33,7 @@ export const Card: FC<CardPropsType> = memo(({ id, title }) => {
         deleteCard={deleteCardHandler}
         changeTitle={changeCardTitleHandler}
       />
-      <Tasks cardId={id} />
+      <Tasks cardId={id} cardTitle={title} />
     </CardContent>
   )
 })

@@ -15,7 +15,7 @@ import { AddItemContainer, Text } from '../../common/shared/style'
 
 import { Task } from './Task'
 
-export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
+export const Tasks: FC<{ cardId: number; cardTitle: string }> = memo(({ cardId, cardTitle }) => {
   const dispatch = useAppDispatch()
   const tasks = useAppSelector<TaskType[]>(state => selectTasksByCardId(state, cardId))
   const [isFormOpened, setIsFormOpened] = useState<boolean>(false)
@@ -39,7 +39,7 @@ export const Tasks: FC<{ cardId: number }> = memo(({ cardId }) => {
     <>
       <TasksContainer>
         {tasks.map(m => (
-          <Task task={m} key={m.id} />
+          <Task task={m} key={m.id} cardTitle={cardTitle} />
         ))}
       </TasksContainer>
       {isFormOpened ? (
