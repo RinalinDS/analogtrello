@@ -80,7 +80,7 @@ export const Board: FC = memo(() => {
       ) : (
         <AddItemContainer onClick={openForm} $isForAddingCard>
           <Text whiteText>
-            &#43; {!cards.length ? LabelMessage.AddList : LabelMessage.AddAnotherList}
+            &#43; {cards.length ? LabelMessage.AddAnotherList : LabelMessage.AddList}
           </Text>
         </AddItemContainer>
       )}
