@@ -38,11 +38,11 @@ export const AddTasksAndCardsForm: FC<AddTasksAndCardsFormPropsType> = memo(
         {({ values, errors }) => (
           <StyledForm $isForAddingCard={isForAddingCard}>
             <StyledField
-              name="title"
+              name='title'
               placeholder={label}
               component={component}
               autoComplete={'off'}
-              autofocus
+              autoFocus
             />
             <ButtonContainer>
               <SubmitButton disabled={!values.title || !!errors.title} type={'submit'}>
@@ -60,7 +60,7 @@ export const AddTasksAndCardsForm: FC<AddTasksAndCardsFormPropsType> = memo(
 )
 
 const StyledForm = styled(Form)<{ $isForAddingCard?: boolean }>`
-  padding: ${props => (props.$isForAddingCard ? '0.6rem' : '')};
-  width: ${props => (props.$isForAddingCard ? '20rem' : '100%')};
-  background: ${props => (props.$isForAddingCard ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
+    padding: ${props => (props.$isForAddingCard ? '0.6rem' : '')};
+    width: ${props => (props.$isForAddingCard ? '20rem' : '100%')};
+    background: ${props => (props.$isForAddingCard ? 'rgba(152, 149, 149, 0.47)' : 'inherit')};
 `

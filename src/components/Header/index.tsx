@@ -13,14 +13,20 @@ export const Header = memo(() => {
   return (
     <HeaderContainer>
       {isDataLoading && <LinearProgress color={'secondary'} />}
-      <Text whiteText>hello</Text>
+      <TextContainer>
+        <Text>Rinalin's Trello Analog</Text>
+      </TextContainer>
+
     </HeaderContainer>
   )
 })
 
 export const HeaderContainer = styled.header`
-  grid-column-start: span 2;
-  color: white;
-  border-bottom: 1px solid white;
-  background: ${props => props.theme.background || '#343a40'};
+    grid-column-start: span 2;
+    color: white;
+    border-bottom: 1px solid white;
+    background: ${props => props.theme.background || '#343a40'};
+`
+const TextContainer = styled.div`
+    padding: 1rem
 `

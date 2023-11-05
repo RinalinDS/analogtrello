@@ -63,7 +63,6 @@ export const AddBoardForm: FC<AddBoardFormPropsType> = memo(({ callBack, label }
           resetForm()
         }}
         validationSchema={schema}
-        validate={}
       >
         {({ values, errors }) => (
           <StyledForm>
@@ -84,7 +83,6 @@ const StyledForm = styled(Form)`
   flex-direction: column;
   gap: 1.2rem;
   padding: 2rem;
-  background: lightyellow;
 `
 
 const CreateButton = styled.button`

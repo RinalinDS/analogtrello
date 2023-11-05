@@ -19,7 +19,7 @@ import { setCurrentBoardId } from '../../store/reducers/boardsReducer'
 import { AddItemContainer, Text } from '../../common/shared/style'
 
 export const Board: FC = memo(() => {
-  const { id } = useParams()
+  const { id } = useParams() as Required<{ id: string }>
   const [isFormOpened, setIsFormOpened] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -35,7 +35,7 @@ export const Board: FC = memo(() => {
   const addCardHandler = useCallback(
     (title: string) => {
       const cardId = +new Date()
-      dispatch(addCard({ id: cardId, title, boardId: +id! }))
+      dispatch(addCard({ id: cardId, title, boardId: +id }))
     },
     [id, dispatch],
   )
