@@ -3,9 +3,9 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { RoutesPath } from './enums/RoutesPath'
-import { Board } from './components/Board'
-import { Layout } from './Layout'
-import { Main } from './components/Main'
+import { Board } from './pages/Board'
+import { Layout } from './pages/Layout'
+import { Main } from './pages/Main'
 
 export const App = () => {
   return (
