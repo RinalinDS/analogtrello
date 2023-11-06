@@ -56,8 +56,8 @@ export const Board: FC = memo(() => {
 
   useEffect(() => {
     if (!currentBoard && !isDataLoading) {
-      navigate(RoutesPath.index)
       dispatch(setCurrentBoardId(null))
+      navigate(RoutesPath.index)
     }
   }, [isDataLoading, currentBoard, navigate, dispatch])
 
@@ -89,15 +89,15 @@ export const Board: FC = memo(() => {
 })
 
 export const BoardContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-  padding: 1.2rem 2.4rem;
-  height: 100%;
-  background: ${props => props.theme.background || 'lightblue'};
-  color: ${props => props.theme.color || 'black'};
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.2rem 2.4rem;
+    height: 100%;
+    background: ${props => props.theme.background || 'lightblue'};
+    color: ${props => props.theme.color || 'black'};
 `
 export const CardsContainer = styled.div`
-  display: flex;
-  gap: 2rem;
+    display: flex;
+    gap: 2rem;
 `
