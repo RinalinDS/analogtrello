@@ -1,5 +1,5 @@
 {
-  "name": "my-project",
+  "name": "trello",
   "private": true,
   "workspaces": [
     "client",

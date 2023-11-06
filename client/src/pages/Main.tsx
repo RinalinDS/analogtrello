@@ -1,29 +1,7 @@
 import styled from 'styled-components'
-import React, { memo, useEffect } from 'react'
-
-import { useNavigate } from 'react-router-dom'
-
-import { selectBoards } from '../store/selectors/boardsSelector'
-import { useAppSelector } from '../hooks/useAppSelector'
-import { setCurrentBoardId } from '../store/reducers/boardsReducer'
-import { useAppDispatch } from '../hooks/useAppDispatch'
-import { clearTheme } from '../store/reducers/appReducer'
+import React from 'react'
 
 export const Main = () => {
-  const boards = useAppSelector(selectBoards)
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-
-
-  useEffect(() => {
-    dispatch(clearTheme())
-    if (boards.length) {
-      dispatch(setCurrentBoardId(+boards[0].id))
-      navigate(`/boards/${boards[0].id}`)
-
-    }
-  }, [boards])
-
   return (
     <MainContainer>
       <Container>
