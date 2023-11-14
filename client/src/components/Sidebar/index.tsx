@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useNavigate } from 'react-router-dom'
@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 
-import { BoardType } from '../../types/BoardsType'
 import {
   addBoard,
   deleteBoard,
@@ -14,13 +13,14 @@ import {
   setCurrentBoardId,
   toggleIsNewBoardCreated,
 } from '../../store/reducers/boardsReducer'
+import { BoardType } from '../../types/BoardsType'
 
+import { RoutesPath } from '../../enums/RoutesPath'
 import {
   selectBoards,
   selectCurrentBoardId,
   selectIsNewBoardCreated,
 } from '../../store/selectors/boardsSelector'
-import { RoutesPath } from '../../enums/RoutesPath'
 
 import { BasicMenu } from '../../common/Menu'
 
@@ -30,12 +30,12 @@ import { clearTheme } from '../../store/reducers/appReducer'
 
 import { ServicePath } from '../../enums/ServicePath'
 
-import { LabelMessage } from '../../enums/Message'
 import { AddBoardForm } from '../../common/AddForms/AddBoardForm'
+import { LabelMessage } from '../../enums/Message'
 
 import { BoardLink } from './BoardLink'
 
-export const Sidebar = memo(() => {
+export const Sidebar = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
@@ -102,12 +102,12 @@ export const Sidebar = memo(() => {
       </List>
     </SidebarContainer>
   )
-})
+}
 
 export const SidebarContainer = styled.div`
   grid-row-start: span 2;
   width: 26rem;
-  background: ${props => props.theme.background || 'green'};
+  background: ${props => props.theme.background || 'lightblue'};
   height: 100%;
   border-right: 1px solid white;
   padding: 1.2rem 2.4rem;
@@ -129,6 +129,7 @@ export const List = styled.div`
     text-decoration: none;
     width: 70%;
     padding: 0.6rem;
+    color: ${props => (props.theme.background ? '#fff' : 'black')};
   }
 
   & a:hover {

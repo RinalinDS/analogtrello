@@ -1,24 +1,24 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
 
-import { useAppSelector } from '../hooks/useAppSelector'
-import { useAppDispatch } from '../hooks/useAppDispatch'
-import { selectTasksByCardId } from '../store/selectors/cardsSelector'
-import { addCard, fetchCards } from '../store/reducers/cardsReducer'
-import { Card } from '../components/Card'
-import { BoardType } from '../types/BoardsType'
-import { selectCurrentBoard } from '../store/selectors/boardsSelector'
-import { setTheme } from '../store/reducers/appReducer'
 import { AddTasksAndCardsForm } from '../common/AddForms/AddTasksAndCardsForm'
+import { AddItemContainer, Text } from '../common/shared/style'
+import { Card } from '../components/Card'
 import { LabelMessage } from '../enums/Message'
 import { RoutesPath } from '../enums/RoutesPath'
-import { selectIsLoading } from '../store/selectors/appSelector'
+import { useAppDispatch } from '../hooks/useAppDispatch'
+import { useAppSelector } from '../hooks/useAppSelector'
+import { setTheme } from '../store/reducers/appReducer'
 import { setCurrentBoardId } from '../store/reducers/boardsReducer'
-import { AddItemContainer, Text } from '../common/shared/style'
+import { addCard, fetchCards } from '../store/reducers/cardsReducer'
+import { selectIsLoading } from '../store/selectors/appSelector'
+import { selectCurrentBoard } from '../store/selectors/boardsSelector'
+import { selectTasksByCardId } from '../store/selectors/cardsSelector'
+import { BoardType } from '../types/BoardsType'
 
-export const Board: FC = memo(() => {
+export const Board: FC = () => {
   const { id } = useParams() as Required<{ id: string }>
   const [isFormOpened, setIsFormOpened] = useState<boolean>(false)
   const dispatch = useAppDispatch()
@@ -86,18 +86,18 @@ export const Board: FC = memo(() => {
       )}
     </BoardContainer>
   )
-})
+}
 
 export const BoardContainer = styled.div`
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    padding: 1.2rem 2.4rem;
-    height: 100%;
-    background: ${props => props.theme.background || 'lightblue'};
-    color: ${props => props.theme.color || 'black'};
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.2rem 2.4rem;
+  height: 100%;
+  background: ${props => props.theme.background || 'lightblue'};
+  color: ${props => props.theme.color || 'black'};
 `
 export const CardsContainer = styled.div`
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  gap: 2rem;
 `

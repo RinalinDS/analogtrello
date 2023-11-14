@@ -1,16 +1,14 @@
-import React, { memo } from 'react'
-
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 import { Outlet } from 'react-router-dom'
 
-import { useAppSelector } from '../hooks/useAppSelector'
-import { selectTheme } from '../store/selectors/appSelector'
+import { Snackbar } from '../common/Snackbar'
 import { Header } from '../components/Header'
 import { Sidebar } from '../components/Sidebar'
-import { Snackbar } from '../common/Snackbar'
+import { useAppSelector } from '../hooks/useAppSelector'
+import { selectTheme } from '../store/selectors/appSelector'
 
-export const Layout = memo(() => {
+export const Layout = () => {
   const theme = useAppSelector(selectTheme)
 
   return (
@@ -24,7 +22,7 @@ export const Layout = memo(() => {
       </AppContainer>
     </ThemeProvider>
   )
-})
+}
 
 export const AppContainer = styled.div`
   min-height: 100vh;

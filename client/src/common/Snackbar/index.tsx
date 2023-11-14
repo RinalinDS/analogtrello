@@ -4,10 +4,10 @@ import { Alert, Stack } from '@mui/material'
 
 import { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types'
 
-import { useAppSelector } from '../../hooks/useAppSelector'
-import { selectMessages } from '../../store/selectors/snackbarSelector'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useAppSelector } from '../../hooks/useAppSelector'
 import { removeMessage } from '../../store/reducers/snackbarReducer'
+import { selectMessages } from '../../store/selectors/snackbarSelector'
 
 type AlertProps = {
   id: string
@@ -53,7 +53,7 @@ const CustomAlert: FC<AlertProps> = memo(({ id, type, callback, text }) => {
   )
 })
 
-export const Snackbar = memo(() => {
+export const Snackbar = () => {
   const dispatch = useAppDispatch()
   const messages = useAppSelector(selectMessages)
   const deleteMsg = useCallback((id: string) => dispatch(removeMessage(id)), [dispatch])
@@ -70,4 +70,4 @@ export const Snackbar = memo(() => {
       ))}
     </Stack>
   )
-})
+}
