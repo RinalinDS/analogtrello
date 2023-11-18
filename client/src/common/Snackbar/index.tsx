@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import { FC, SyntheticEvent, memo, useCallback, useEffect, useState } from 'react'
 
 import { Alert, Stack } from '@mui/material'
 
@@ -30,7 +30,7 @@ const CustomAlert: FC<AlertProps> = memo(({ id, type, callback, text }) => {
   }, [id, callback, type])
 
   const handleAlertClose = useCallback(
-    (event?: React.SyntheticEvent | Event, reason?: string) => {
+    (event?: SyntheticEvent | Event, reason?: string) => {
       if (reason === 'clickaway') {
         return
       }
@@ -53,7 +53,7 @@ const CustomAlert: FC<AlertProps> = memo(({ id, type, callback, text }) => {
   )
 })
 
-export const Snackbar = () => {
+export const Snackbar: FC = () => {
   const dispatch = useAppDispatch()
   const messages = useAppSelector(selectMessages)
   const deleteMsg = useCallback((id: string) => dispatch(removeMessage(id)), [dispatch])

@@ -21,7 +21,7 @@ import {
   SubmitButton,
 } from '../../../common/shared/style'
 
-type DetailedTaskProps = {
+type Props = {
   changeTitle: (title: string) => void
   changeDescription: (description: string) => void
   cardTitle: string
@@ -29,7 +29,7 @@ type DetailedTaskProps = {
   description: string
 }
 
-export const DetailedTask: FC<DetailedTaskProps> = memo(
+export const DetailedTask: FC<Props> = memo(
   ({ changeTitle, changeDescription, cardTitle, description, title }) => {
     const [editTitle, setEditTitle] = useState<boolean>(false)
     const [editDescription, setEditDescription] = useState<boolean>(false)

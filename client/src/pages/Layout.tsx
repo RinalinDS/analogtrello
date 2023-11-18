@@ -1,3 +1,5 @@
+import { FC } from 'react'
+
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 import { Outlet } from 'react-router-dom'
@@ -8,7 +10,7 @@ import { Sidebar } from '../components/Sidebar'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { selectTheme } from '../store/selectors/appSelector'
 
-export const Layout = () => {
+export const Layout: FC = () => {
   const theme = useAppSelector(selectTheme)
 
   return (

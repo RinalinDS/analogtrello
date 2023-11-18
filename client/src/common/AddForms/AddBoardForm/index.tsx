@@ -1,4 +1,4 @@
-import React, { FC, memo, useState } from 'react'
+import { FC, memo, useState } from 'react'
 import * as Yup from 'yup'
 
 import { Form, Formik } from 'formik'
@@ -8,7 +8,7 @@ import { StyledField } from '../../shared/style'
 
 import { ColorPicker } from './ColorPicker'
 
-type AddBoardFormPropsType = {
+type Props = {
   callBack: (title: string, color: string) => void
   label: string
 }
@@ -44,7 +44,7 @@ const schema = Yup.object().shape({
   title: Yup.string().trim().min(1, 'Too Short!').max(50, 'Too Long!').required('Required'),
 })
 
-export const AddBoardForm: FC<AddBoardFormPropsType> = memo(({ callBack, label }) => {
+export const AddBoardForm: FC<Props> = memo(({ callBack, label }) => {
   const [activeColor, setActiveColor] = useState<number>(0)
 
   const submitForm = (title: string) => {
@@ -99,6 +99,16 @@ const CreateButton = styled.button`
   padding: 0.8rem 1.6rem;
   text-decoration: none;
   white-space: normal;
+  transition: all 0.4 ease-in-out;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+  }
 
   &:disabled {
     background-color: rgba(9, 30, 66, 0.04);

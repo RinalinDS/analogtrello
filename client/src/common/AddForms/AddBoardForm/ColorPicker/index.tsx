@@ -1,20 +1,15 @@
-import React, { FC, memo, useCallback } from 'react'
+import { FC, memo } from 'react'
 import styled from 'styled-components'
 
-type PropsType = {
+import { ColorItem } from './ColorItem'
+
+type Props = {
   colors: { hex: string; color: string }[]
   activeColor: number
   setActiveColor: (value: number) => void
 }
 
-type ColorItemPropsType = {
-  bgColor: string
-  active: boolean
-  onClick: (value: number) => void
-  index: number
-}
-
-export const ColorPicker: FC<PropsType> = memo(({ colors, setActiveColor, activeColor }) => {
+export const ColorPicker: FC<Props> = memo(({ colors, setActiveColor, activeColor }) => {
   return (
     <Grid>
       <Title>Background:</Title>
@@ -31,11 +26,6 @@ export const ColorPicker: FC<PropsType> = memo(({ colors, setActiveColor, active
   )
 })
 
-const ColorItem: FC<ColorItemPropsType> = memo(({ onClick, active, index, bgColor }) => {
-  const onClickHandler = useCallback(() => onClick(index), [index, onClick])
-  return <Item bgColor={bgColor} active={active} onClick={onClickHandler}></Item>
-})
-
 export const Grid = styled.div`
   margin-top: 2rem;
   padding: 0.6rem;
@@ -44,13 +34,7 @@ export const Grid = styled.div`
   gap: 1.6rem;
   justify-items: center;
 `
-export const Item = styled.div<{ bgColor: string; active: boolean }>`
-  background: ${props => props.bgColor};
-  text-transform: capitalize;
-  width: 3.6rem;
-  height: 3.6rem;
-  border: ${props => (props.active ? '3px solid lightcoral' : '')};
-`
+
 export const Title = styled.h4`
   grid-column: 1/-1;
   justify-self: start;

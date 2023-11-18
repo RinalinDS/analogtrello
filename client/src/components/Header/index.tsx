@@ -1,19 +1,20 @@
+import { FC } from 'react'
+
 import styled from 'styled-components'
 
 import { LinearProgress } from '@mui/material'
 
-import { Text } from '../../common/shared/style'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { selectIsLoading } from '../../store/selectors/appSelector'
 
-export const Header = () => {
+export const Header: FC = () => {
   const isDataLoading = useAppSelector(selectIsLoading)
 
   return (
     <HeaderContainer>
       {isDataLoading && <LinearProgress color={'secondary'} />}
       <TextContainer>
-        <Text>Rinalin's Trello Analog</Text>
+        <Title>Rinalin's Trello Analog</Title>
       </TextContainer>
     </HeaderContainer>
   )
@@ -27,4 +28,10 @@ export const HeaderContainer = styled.header`
 `
 const TextContainer = styled.div`
   padding: 1rem;
+`
+const Title = styled.h1`
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 36px;
 `

@@ -1,7 +1,7 @@
-import React from 'react'
+import { FC } from 'react'
 import styled, { keyframes } from 'styled-components'
 
-export const Preloader = () => {
+export const Preloader: FC = () => {
   return (
     <Container>
       <Circle />

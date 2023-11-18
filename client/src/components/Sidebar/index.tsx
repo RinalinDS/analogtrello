@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useNavigate } from 'react-router-dom'
@@ -24,8 +24,6 @@ import {
 
 import { BasicMenu } from '../../common/Menu'
 
-import { Text } from '../../common/shared/style'
-
 import { clearTheme } from '../../store/reducers/appReducer'
 
 import { ServicePath } from '../../enums/ServicePath'
@@ -35,13 +33,13 @@ import { LabelMessage } from '../../enums/Message'
 
 import { BoardLink } from './BoardLink'
 
-export const Sidebar = () => {
+export const Sidebar: FC = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const boards = useAppSelector<BoardType[]>(selectBoards)
   const currentBoardId = useAppSelector<number | null>(selectCurrentBoardId)
   const isNewBoardCreated = useAppSelector<boolean>(selectIsNewBoardCreated)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const lastBoardId = boards.at(-1)?.id
   const newBoardUrl = `${ServicePath.boards}/${lastBoardId}`
@@ -82,7 +80,7 @@ export const Sidebar = () => {
   return (
     <SidebarContainer>
       <AddBoardContainer>
-        <Text>Your boards</Text>
+        <Title>Your boards</Title>
         <BasicMenu iconType={'plus'} anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
           <AddBoardForm callBack={addBoardHandler} label={LabelMessage.BoardTitle} />
         </BasicMenu>
@@ -137,4 +135,10 @@ export const List = styled.div`
 
   & a:active {
   }
+`
+
+const Title = styled.h1`
+  font-weight: 500;
+  color: ${props => (props.theme.background ? '#fff' : 'black')};
+  font-size: 20px;
 `

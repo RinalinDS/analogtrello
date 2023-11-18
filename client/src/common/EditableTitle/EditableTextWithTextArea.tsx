@@ -2,12 +2,12 @@ import { ChangeEvent, FC, KeyboardEvent, memo, useCallback, useState } from 'rea
 
 import { StyledEditableText, StyledTextarea } from '../shared/style'
 
-type PropsType = {
+type Props = {
   text: string
   changeText: (title: string) => void
 }
 
-export const EditableTextWithTextArea: FC<PropsType> = memo(({ text, changeText }) => {
+export const EditableTextWithTextArea: FC<Props> = memo(({ text, changeText }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const [newText, setNewText] = useState<string>(text)

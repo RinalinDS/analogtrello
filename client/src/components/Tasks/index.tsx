@@ -1,13 +1,13 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import { FC, memo, useCallback, useEffect, useState } from 'react'
 
 import styled from 'styled-components'
 
-import { useAppSelector } from '../../hooks/useAppSelector'
-import { TaskType } from '../../types/BoardsType'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { selectTasksByCardId } from '../../store/selectors/tasksSelector'
-import { addTask, fetchTasks } from '../../store/reducers/tasksReducer'
 import { LabelMessage } from '../../enums/Message'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import { addTask, fetchTasks } from '../../store/reducers/tasksReducer'
+import { selectTasksByCardId } from '../../store/selectors/tasksSelector'
+import { TaskType } from '../../types/BoardsType'
 
 import { AddTasksAndCardsForm } from '../../common/AddForms/AddTasksAndCardsForm'
 
@@ -15,7 +15,12 @@ import { AddItemContainer, Text } from '../../common/shared/style'
 
 import { Task } from './Task'
 
-export const Tasks: FC<{ cardId: number; cardTitle: string }> = memo(({ cardId, cardTitle }) => {
+type Props = {
+  cardId: number
+  cardTitle: string
+}
+
+export const Tasks: FC<Props> = memo(({ cardId, cardTitle }) => {
   const dispatch = useAppDispatch()
   const tasks = useAppSelector<TaskType[]>(state => selectTasksByCardId(state, cardId))
   const [isFormOpened, setIsFormOpened] = useState<boolean>(false)

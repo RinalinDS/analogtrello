@@ -6,53 +6,51 @@ import styled from 'styled-components'
 
 import { Icon, IconType } from '../Icon'
 
-type BasicMenuPropsType = {
+type Props = {
   iconType: IconType
   children: React.ReactNode
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>
   anchorEl: HTMLElement | null
 }
 
-export const BasicMenu: FC<BasicMenuPropsType> = memo(
-  ({ iconType, children, setAnchorEl, anchorEl }) => {
-    const open = Boolean(anchorEl)
-    const handleClick = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget)
-      },
-      [setAnchorEl],
-    )
+export const BasicMenu: FC<Props> = memo(({ iconType, children, setAnchorEl, anchorEl }) => {
+  const open = Boolean(anchorEl)
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget)
+    },
+    [setAnchorEl],
+  )
 
-    const handleClose = useCallback(() => {
-      setAnchorEl(null)
-    }, [setAnchorEl])
+  const handleClose = useCallback(() => {
+    setAnchorEl(null)
+  }, [setAnchorEl])
 
-    return (
-      <>
-        <StyledMenuBtn
-          id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
-          <Icon type={iconType} />
-        </StyledMenuBtn>
-        <StyledMenu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          {children}
-        </StyledMenu>
-      </>
-    )
-  },
-)
+  return (
+    <>
+      <StyledMenuBtn
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        <Icon type={iconType} />
+      </StyledMenuBtn>
+      <StyledMenu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        {children}
+      </StyledMenu>
+    </>
+  )
+})
 
 const StyledMenuBtn = styled(Button)`
   cursor: pointer;

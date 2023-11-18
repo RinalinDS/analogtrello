@@ -9,14 +9,14 @@ import { ServicePath } from '../../../enums/ServicePath'
 import { BasicMenu } from '../../../common/Menu'
 import { LabelMessage } from '../../../enums/Message'
 
-type PropsType = {
+type Props = {
   active: boolean
   id: number
   title: string
   onDeleteButtonClick: (id: number) => void
 }
 
-export const BoardLink: FC<PropsType> = memo(({ active, id, title, onDeleteButtonClick }) => {
+export const BoardLink: FC<Props> = memo(({ active, id, title, onDeleteButtonClick }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const deleteClickHandler = useCallback(() => {

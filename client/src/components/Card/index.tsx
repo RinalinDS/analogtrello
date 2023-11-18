@@ -8,12 +8,12 @@ import { changeCardTitle, deleteCard } from '../../store/reducers/cardsReducer'
 
 import { CardTitle } from './CardTitle'
 
-type CardPropsType = {
+type Props = {
   id: number
   title: string
 }
 
-export const Card: FC<CardPropsType> = memo(({ id, title }) => {
+export const Card: FC<Props> = memo(({ id, title }) => {
   const dispatch = useAppDispatch()
   const deleteCardHandler = useCallback(() => {
     dispatch(deleteCard({ id }))

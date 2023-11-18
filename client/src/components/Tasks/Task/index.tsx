@@ -13,12 +13,12 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { Modal } from '../../../common/Modal'
 import { DetailedTask } from '../DetailedTask'
 
-type TaskPropsType = {
+type Props = {
   task: TaskType
   cardTitle: string
 }
 
-export const Task: FC<TaskPropsType> = memo(({ task, cardTitle }) => {
+export const Task: FC<Props> = memo(({ task, cardTitle }) => {
   const dispatch = useAppDispatch()
   const [isVisible, setIsVisible] = useState<boolean>(false)
 

@@ -2,13 +2,13 @@ import React, { FC, memo, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
-type PortalModalPropsType = {
+type Props = {
   visible: boolean
   setIsVisible: (value: boolean) => void
   children: React.ReactNode
 }
 
-export const Modal: FC<PortalModalPropsType> = memo(({ visible, children, setIsVisible }) => {
+export const Modal: FC<Props> = memo(({ visible, children, setIsVisible }) => {
   const closeModal = useCallback(() => {
     setIsVisible(false)
   }, [setIsVisible])

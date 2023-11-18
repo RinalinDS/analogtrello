@@ -1,7 +1,7 @@
+import { FC } from 'react'
 import styled from 'styled-components'
-import React from 'react'
 
-export const Main = () => {
+export const Main: FC = () => {
   return (
     <MainContainer>
       <Container>
@@ -14,23 +14,22 @@ export const Main = () => {
           <li>Add, edit, delete tasks for cards</li>
           <li>You can also add the description to the tasks by clicking on them</li>
         </ul>
-
       </Container>
     </MainContainer>
   )
 }
 
 const MainContainer = styled.div`
-    background: lightblue;
+  background: lightblue;
 `
 
 const Container = styled.div`
-    margin-top: 5.6rem;
-    background: lightblue;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 2.4rem;
-    font-family: "Courier New", serif;
-    font-size: 2.8rem;
+  margin-top: 5.6rem;
+  background: lightblue;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 2.4rem;
+  font-family: 'Courier New', serif;
+  font-size: 2.8rem;
 `
